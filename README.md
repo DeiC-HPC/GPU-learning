@@ -1,7 +1,7 @@
 GPU programming
 ===============
 
-This folder contains material for learning GPU programming in various
+This repo contains material for learning GPU programming in various
 programming environments.
 
 Introduction
@@ -40,3 +40,11 @@ If your code contains an if-else statement both the if and else part will be run
 for all data, but only the part which satisfies the condition will be active.
 This means that code with big if-else blocks will be ineffective to run on a
 GPU.
+
+Compilers used
+--------------
+
+- Cuda, NVCC 11
+- OpenMP and OpenACC, GCC 10.2.0 with NVPTX offloading.
+- Python Cuda, PyCuda 2019.1.2
+- Python OpenCL, PyOpenCL 2020.2.2

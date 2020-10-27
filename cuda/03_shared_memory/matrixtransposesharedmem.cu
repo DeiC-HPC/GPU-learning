@@ -12,18 +12,19 @@ __global__ void matrixtranspose(
     int rowsA)
 {
     __shared__ int tile[T][T+1];
-    int tidx = threadIdx.x;
-    int tidy = threadIdx.y;
-    int i = blockIdx.x*T + tidx;
-    int j = blockIdx.y*T + tidy;
-    if(j < colsA && i < rowsA) {
-        tile[tidy][tidx] = A[i * colsA + j];
+
+    int x = blockIdx.x * T + threadIdx.x;
+    int y = blockIdx.y * T + threadIdx.y;
+    if (y < rowsA && x < colsA) {
+        tile[threadIdx.y][threadIdx.x] = A[y*colsA+x];
     }
+
     __syncthreads();
-    i = blockIdx.y*T + threadIdx.x;
-    j = blockIdx.x*T + threadIdx.y;
-    if(j < rowsA && i < colsA) {
-        trA[i * rowsA + j] = tile[tidx][tidy];
+
+    x = blockIdx.y * T + threadIdx.x;
+    y = blockIdx.x * T + threadIdx.y;
+    if (y < rowsA && x < colsA) {
+        trA[y*rowsA + x] = tile[threadIdx.x][threadIdx.y];
     }
 }
 

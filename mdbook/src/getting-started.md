@@ -13,6 +13,10 @@ logic we need to calculate the Mandelbrot set.
 {:.cuda}
 Hello, this is cuda
 
+{:.openmp}
+Do you know OpenMP?
+
+{:.cuda-code}
 ```c++
 int mandelbrot(complex<float> z, int maxiterations) {
     complex<float> c = z;
@@ -26,7 +30,6 @@ int mandelbrot(complex<float> z, int maxiterations) {
     return maxiterations;
 }
 ```
-{:.openmp}
 
 It takes a complex number `z` and a maximum number of iterations to be run.
 

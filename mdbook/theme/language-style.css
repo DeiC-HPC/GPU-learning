@@ -1,5 +1,62 @@
 .cuda,
 .openmp,
-.openacc {
+.openacc,
+.cuda-code,
+.openmp-code,
+.openacc-code,
+.cuda-code + pre,
+.openmp-code + pre,
+.openacc-code + pre {
   display: none;
+}
+
+.cuda,
+.openmp,
+.openacc,
+.cuda-code + pre,
+.openmp-code + pre,
+.openacc-code + pre {
+  border: 3px #6e6b5e solid;
+  margin-top: 25px;
+}
+
+.cuda,
+.openmp,
+.openacc {
+  padding: 0px 30px;
+}
+
+.cuda-code + pre,
+.openmp-code + pre,
+.openacc-code + pre {
+  background-color: #f1f1f1;
+  padding-top: 7px;
+}
+
+.cuda:before,
+.openmp:before,
+.openacc:before,
+.cuda-code + pre:before,
+.openmp-code + pre:before,
+.openacc-code + pre:before {
+  font-family: "Open Sans", sans-serif;
+  content: var(--language);
+  display: table;
+  background-color: #6e6b5e;
+  color: #f1f1f1;
+  padding: 7px;
+}
+
+.cuda:before,
+.openmp:before,
+.openacc:before {
+  margin-top: -19px;
+  margin-left: -15px;
+}
+
+.cuda-code + pre:before,
+.openmp-code + pre:before,
+.openacc-code + pre:before {
+  margin-top: -26px;
+  margin-left: 15px;
 }

@@ -1,68 +1,103 @@
 Getting started
 ===============
 
-In this part we are going to show you how to run a program on a GPU, this is done using an example program, which is converted in a few steps to run on the GPU. The example program we are going to look at calculates the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set).
+In this part we are going to show you how to run a program on a GPU, this is done using an example program, which is converted in a few steps to run on the GPU. As an example program we are going to look at calculating the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set).
+
+0 Before we start
+-----------------
+Before we start converting the program to run on GPUs, we need to lay some groundwork. We need to understand how to make the program run on the GPU and how to get our data to and from it.
+
+There are a number of different approaches we can choose from.
+
+**CUDA**: CUDA code is a variant of `C++` with some extra syntax. CUDA code typically uses the file-extension `.cu`. The main difference between CUDA code and `C++`, is that you need to declare whether something should be runnable on the CPU, GPU or both. It has special syntax for invoking GPU code from the CPU. To run CUDA code, you can either write entire programs in CUDA and compile them directly using the NVIDIA CUDA Compiler (`nvcc`), or use the PyCUDA library to invoke CUDA code from inside Python.
+
+**OpenMP/OpenACC**: OpenMP and OpenACC are both a collection of pragma-based annotations for `C`, `C++` and `Fortran`. These annotations specify for instance how to parallelize code or when to copy memory. Since these annotations does not affect the syntax of the underlying program, it is mostly possible to compile OpenMP/OpenACC programs while ignoring the annotations ­— however doing so will often change the behavior of the program. OpenMP and OpenACC are very similar and share a lot of history. The main difference between them is that OpenACC was originally designed for GPU parallelization, while OpenMP was designed for CPU parallelization and got GPU support added at a later time.
+
+**OpenCL**: TODO: Write something about OpenCL.
+
+This guide has been written in multiple versions, depending on which platform you want to learn. You can change which version you are viewing to using the drop-down menu at the top. Try changing it now and see how the text below changes:
+
+{:.cuda}
+This is text is specific to the CUDA guide.
+
+{:.pycuda}
+This is text is specific to the PyCUDA guide.
+
+{:.pyopencl}
+This is text is specific to the PyOpenCL guide.
+
+{:.cpp-openmp}
+This is text is specific to the OpenMP guide (in C++).
+
+{:.f90-openmp}
+This is text is specific to the OpenMP guide (in Fortran).
+
+{:.cpp-openacc}
+This is text is specific to the OpenACC guide (in C++).
+
+{:.f90-openacc}
+This is text is specific to the OpenACC guide (in Fortran).
+
 
 0 Sequential implementation
 ---------------------------
+To calculate the Mandelbrot set, we map each point \\(c\\) in the complex plane to a function \\( f_c(z) = z^2 + c \\). The Mandelbrot, is the set of points such that iterated application of \\(f_c\\) remains bounded forever, i.e. \\(|f_c(f_c(\dots f_c(0) \dots))|\\) must not diverge to infinity.
+
+When visualizing the Mandelbrot, one is also interested in how quickly this expression grows beyond the circle bounded by \\(|z|<2\\).
+
 The sequential version contains a function called `mandelbrot`, which is all the logic we need to calculate the Mandelbrot set.
 
-{:.cuda}
-Hello, this is cuda
-
-{:.pycuda}
-Hello, this is PyCUDA
-
-{:.pyopencl}
-Hello, this is PyOpenCL
-
-{:.cpp-openmp}
-C++ openmp
-
-{:.cpp-openacc}
-C++ openacc
-
-{:.f90-openmp}
-Fortran openmp
-
-{:.f90-openacc}
-Fortan openacc
-
-{:.cuda-code}
+{:.cuda-code cpp-openmp-code cpp-openacc-code}
 ```c++
-int mandelbrot(complex<float> z, int maxiterations) {
-    complex<float> c = z;
-    for (int i = 0; i < maxiterations; i++) {
-        if (abs(z) > 2) {
-            return i;
-        }
-        z = z*z + c;
-    }
-
-    return maxiterations;
-}
+{{#include mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
 ```
+
+{:.f90-openmp-code f90-openacc-code}
+```f90
+{{#include mandelbrot/fortran/reference-implementation.f90:mandelbrot}}
+```
+
+{:.pycuda-code pyopencl-code}
+```python
+{{#include mandelbrot/python/reference-implementation.py:mandelbrot}}
+```
+
+[Click here to see the entire example](https://github.com). TODO: Add link
 
 It takes a complex number `z` and a maximum number of iterations to be run.
 
-To setup the function we have a lot of variables with default values defining
-width and height of the image we are generating, how many iterations should at
-most be run in the `mandelbrot` function, and which area of the fractal should
-be shown (default is everything).
+To setup the function we have a lot of variables with default values defining width and height of the image we are generating, how many iterations should at most be run in the `mandelbrot` function, and which area of the fractal should be shown (default is everything).
 
-Then we have two nested loops creating a complex number in the range of the
-minimum and maximum values and then calculating the mandelbrot function for each
-of these numbers.
+Then we have two nested loops creating a complex number in the range of the minimum and maximum values and then calculating the mandelbrot function for each of these numbers.
 
-1 Before we start
------------------
-Before we start converting the program into CUDA, we need to lay some
-groundwork. We need to understand how to make the program run on the GPU and how
-to get our data to and from it.
+The data is then written to disk so we can visualize it and see the mandelbrot.
 
-CUDA code is kept in files with a `.cu` extension, but the language is basically
-`C++` with some extensions. To handle these extensions we need to use the NVIDIA
-CUDA Compiler or `nvcc`.
+{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
+This means that you mostly write your programs as you normally do but with some
+exceptions as we need to make it work on the GPU as well.
+
+{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
+When compiling there are several available options, but in this tutorial we will
+focus on GCC.
+
+{:.cpp-openacc f90-openacc}
+In GCC you add the flag `-fopenacc` when you want the compiler to understand the
+OpenACC pragmas. When you compile for the GPU then you will also need to use
+`-fno-stack-protector` as these checks will not work and cause the program to
+crash. If you use any math libraries then you will also need to add
+`-foffload=-lm`.
+
+{:.cpp-openmp f90-openmp}
+In GCC you add the flag `-fopenmp` when you want the compiler to understand the
+OpenMP pragmas. When you compile for the GPU then you will also need to use
+`-fno-stack-protector` as these checks will not work and cause the program to
+crash. If you use any math libraries then you will also need to add
+`-foffload=-lm`.
+
+{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
+If you are using CUDA 11 then you also have to add `-foffload="-misa=sm_35"` as
+the default currently is `sm_30`, which has been dropped. Also the only two
+options are `sm_30` and `sm_35`.
 
 Kernels, as the functions running on GPUs are called, have `__global__` before
 their return type and name. The return type will always be `void` because these

@@ -8,6 +8,7 @@ title = "GPU learning"
 [output.html]
 additional-css = ["theme/language-style.css"]
 additional-js = ["theme/language-style.js"]
+mathjax-support = true
 
 [preprocessor.index]
 [preprocessor.classy]

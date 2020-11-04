@@ -6,6 +6,7 @@
 
 using namespace std;
 
+/* ANCHOR: mandelbrot */
 int mandelbrot(complex<float> z, int maxiterations) {
     complex<float> c = z;
     for (int i = 0; i < maxiterations; i++) {
@@ -17,6 +18,7 @@ int mandelbrot(complex<float> z, int maxiterations) {
 
     return maxiterations;
 }
+/* ANCHOR_END: mandelbrot */
 
 int main() {
     int width = 2000;

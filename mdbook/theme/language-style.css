@@ -14,8 +14,8 @@
 .cpp-openacc-code,
 .cpp-openacc-code + pre,
 .f90-openmp,
-.f90-openacc-code,
-.f90-openacc-code + pre,
+.f90-openmp-code,
+.f90-openmp-code + pre,
 .f90-openacc,
 .f90-openacc-code,
 .f90-openacc-code + pre
@@ -105,8 +105,8 @@
 .pyopencl-code + pre:before,
 .cpp-openmp-code + pre:before,
 .cpp-openacc-code + pre:before,
-.f90openmp-code + pre:before,
-.f90openacc-code + pre:before
+.f90-openmp-code + pre:before,
+.f90-openacc-code + pre:before
 {
   margin-top: -26px;
   margin-left: 15px;

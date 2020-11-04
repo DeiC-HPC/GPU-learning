@@ -1,20 +1,32 @@
 Getting started
 ===============
 
-In this part we are going to show you how to run a program on a GPU, this is
-done using an example program, which is converted in a few steps to run on the
-GPU. The example program we are going to look at calculates the Mandelbrot set.
+In this part we are going to show you how to run a program on a GPU, this is done using an example program, which is converted in a few steps to run on the GPU. The example program we are going to look at calculates the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set).
 
 0 Sequential implementation
 ---------------------------
-The sequential version contains a function called `mandelbrot`, which is all the
-logic we need to calculate the Mandelbrot set.
+The sequential version contains a function called `mandelbrot`, which is all the logic we need to calculate the Mandelbrot set.
 
 {:.cuda}
 Hello, this is cuda
 
-{:.openmp}
-Do you know OpenMP?
+{:.pycuda}
+Hello, this is PyCUDA
+
+{:.pyopencl}
+Hello, this is PyOpenCL
+
+{:.cpp-openmp}
+C++ openmp
+
+{:.cpp-openacc}
+C++ openacc
+
+{:.f90-openmp}
+Fortran openmp
+
+{:.f90-openacc}
+Fortan openacc
 
 {:.cuda-code}
 ```c++

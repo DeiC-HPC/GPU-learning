@@ -6,11 +6,6 @@ pkgs.mkShell {
 
     shellHook = ''
       cleanup() {
-        echo 'Cleaning up..'
-        echo "Killing nginx ($(cat logs/nginx.pid))"
-        kill $(cat logs/nginx.pid)
-
-        echo $MDBOOK_PID $JUPYTER_PID
         kill $MDBOOK_PID
         kill $JUPYTER_PID
       }
@@ -24,5 +19,6 @@ pkgs.mkShell {
       JUPYTER_PID=$!
       echo $MDBOOK_PID $JUPYTER_PID
       nginx -c nginx.conf -p $PWD
+      exit 0
     '';
 }

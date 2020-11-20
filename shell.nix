@@ -16,6 +16,7 @@ pkgs.mkShell {
 
       JUPYTER_CONFIG=$PWD/jupyter-config.py
       nix build ../hpc-nix#jupyter -o result-jupyter
+      export JUPYTER_HEADER_FILES=$PWD/notebooks/headers
       (cd notebooks && exec ../result-jupyter/bin/jupyter-lab --no-browser --config=$JUPYTER_CONFIG </dev/null) &
       JUPYTER_PID=$!
       echo $MDBOOK_PID $JUPYTER_PID

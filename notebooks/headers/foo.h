@@ -1,0 +1,1 @@
+static const char *foo = __FILE__;

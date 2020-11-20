@@ -15,7 +15,8 @@ pkgs.mkShell {
       MDBOOK_PID=$!
 
       JUPYTER_CONFIG=$PWD/jupyter-config.py
-      (cd ../hpc-nix && nix build .#jupyter && exec ./result/bin/jupyter-lab --no-browser --config=$JUPYTER_CONFIG </dev/null) &
+      nix build ../hpc-nix#jupyter -o result-jupyter
+      (cd notebooks && exec ../result-jupyter/bin/jupyter-lab --no-browser --config=$JUPYTER_CONFIG </dev/null) &
       JUPYTER_PID=$!
       echo $MDBOOK_PID $JUPYTER_PID
       nginx -c nginx.conf -p $PWD

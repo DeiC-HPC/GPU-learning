@@ -11,7 +11,8 @@ prg = cl.Program(ctx, """
             __global const int *a,
             __global const int *b,
             __global int *res,
-            ushort width)
+            ushort width,
+            ushort height)
         {
             int i = get_global_id(0);
 
@@ -41,7 +42,8 @@ prg.matrixaddition(
         a_dev,
         b_dev,
         res_dev,
-        np.uint16(width))
+        np.uint16(width),
+        np.uint16(height))
 
 cl.enqueue_copy(queue, res, res_dev).wait()
 

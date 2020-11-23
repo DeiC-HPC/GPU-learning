@@ -44,6 +44,8 @@ reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`, and `||`.
 
 The two programs are based around two loops the first being a map and the second
 being a reduce. In the not optimized program we copy variables in both loops.
+
+{:.f90-openacc-code}
 ```f90
 !$acc parallel loop copyout(elements)
 do i=1,num
@@ -55,10 +57,24 @@ do i=1,num
     res = res + elements(i)
 enddo
 ```
+{:.cpp-openmp-code}
+```c++
+#pragma omp target teams distribute parallel for map(tofrom:elements[:num])
+for (int i = 0; i < num; i++) {
+    elements[i] = i;
+}
+
+#pragma omp target teams distribute parallel for reduction(+:res) map(tofrom:elements[:num]) map(from:res)
+for (int i = 0; i < num; i++) {
+    res += elements[i];
+}
+```
 In the optimized version we put the code into a data region and create the
 `elements` array on the GPU and then do our calculations so it is never copied.
 The only variable that is copied is the `res`. As copying variables and arrays
 between CPU and GPU is an expensive operation then the goal is to limit that.
+
+{:.f90-openacc-code}
 ```f90
 !$acc data create(elements)
 !$acc parallel loop

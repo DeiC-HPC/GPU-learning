@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
 import pycuda.driver as cuda
@@ -6,6 +7,7 @@ from pycuda.compiler import SourceModule
 import math
 import time
 
+# ANCHOR: mandelbrot
 mod = SourceModule("""
         #include "cuComplex.h"
 
@@ -40,7 +42,7 @@ mod = SourceModule("""
             }
         }
         """)
-
+# ANCHOR_END: mandelbrot
 
 width = 1000
 height = 1000
@@ -49,6 +51,7 @@ xmin = -2.5
 xmax = 1.5
 ymin = -2.0
 ymax = 2.0
+
 start_time = time.time()
 res = np.empty(width*height).astype(np.int32)
 
@@ -82,7 +85,7 @@ total_time_gpu_only = time.time() - start_time
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()
 
-plt.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
+ax.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
 plt.axis("off")
 plt.tight_layout()
 

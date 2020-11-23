@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
 import pycuda.driver as cuda
@@ -6,6 +7,7 @@ from pycuda.compiler import SourceModule
 import math
 import time
 
+# ANCHOR: mandelbrot
 mod = SourceModule("""
         #include "cuComplex.h"
 
@@ -33,6 +35,7 @@ mod = SourceModule("""
             }
         }
         """)
+# ANCHOR_END: mandelbrot
 
 width = 1000
 height = 1000
@@ -41,10 +44,13 @@ xmin = -2.5
 xmax = 1.5
 ymin = -2.0
 ymax = 2.0
-start_time = time.time()
-reals = np.linspace(xmin, xmax, width)
-imaginaries = np.linspace(ymax, ymin, height) * 1j
 
+start_time = time.time()
+# Creates a list of equally distributed numbers
+reals = np.linspace(xmin, xmax, width)
+imaginaries = np.linspace(ymin, ymax, height) * 1j
+
+# Creating a combination of all values in the two lists
 zs = (reals+imaginaries[:, np.newaxis]).flatten().astype(np.complex64)
 
 res = np.empty(width*height).astype(np.int32)
@@ -76,7 +82,7 @@ total_time_naive = time.time() - start_time
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()
 
-plt.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
+ax.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
 plt.axis("off")
 plt.tight_layout()
 

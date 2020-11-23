@@ -8,6 +8,7 @@ import time
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
 
+# ANCHOR: mandelbrot
 prg = cl.Program(ctx, """
         float2 complex_product(float2 a, float2 b) {
             float2 res;
@@ -25,8 +26,8 @@ prg = cl.Program(ctx, """
             float ymax,
             ushort max_iterations)
         {
-            int x = get_global_id(1);
-            int y = get_global_id(0);
+            int x = get_global_id(0);
+            int y = get_global_id(1);
             float widthf = width - 1.0f;
 
             float2 z;
@@ -45,7 +46,7 @@ prg = cl.Program(ctx, """
             }
         }
         """).build()
-
+# ANCHOR_END: mandelbrot
 
 width = 1000
 height = 1000
@@ -54,9 +55,11 @@ xmin = -2.5
 xmax = 1.5
 ymin = -2.0
 ymax = 2.0
-res = np.empty(width*height).astype(np.int32)
 
 start_time = time.time()
+res = np.empty(width*height).astype(np.int32)
+
+# Flags for memory on GPU
 mf = cl.mem_flags
 res_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=res.nbytes)
 
@@ -82,7 +85,7 @@ total_time_gpu_only = time.time() - start_time
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()
 
-plt.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
+ax.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
 plt.axis("off")
 plt.tight_layout()
 

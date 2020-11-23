@@ -24,7 +24,7 @@ ymax = 2.0
 start_time = time.time()
 # Creates a list of equally distributed numbers
 reals = np.linspace(xmin, xmax, width)
-imaginaries = np.linspace(ymax, ymin, height)
+imaginaries = np.linspace(ymin, ymax, height)
 
 # Empty array for result
 res = np.empty((width, height))

@@ -9,17 +9,14 @@ using namespace std;
 
 /* ANCHOR: mandelbrot */
 __global__ void mandelbrot(int *res, ushort width, ushort height, float xmin,
-                           float xmax, float ymin, float ymax,
+                           float xdelta, float ymin, float ydelta,
                            ushort max_iterations) {
   int x = blockIdx.x * blockDim.x + threadIdx.x;
   int y = blockIdx.y * blockDim.y + threadIdx.y;
-  float widthf = width - 1.0f;
-  float heightf = height - 1.0f;
 
   if (x < width && y < height) {
     cuFloatComplex z =
-        make_cuFloatComplex(xmin + ((xmax - xmin) * x / widthf),
-                            ymax - ((ymax - ymin) * y / heightf));
+        make_cuFloatComplex(xmin + x * xdelta, ymin + y * ydelta);
     cuFloatComplex c = z;
 
     for (int i = 0; i < max_iterations; i++) {
@@ -51,8 +48,9 @@ int main() {
   cudaMalloc((void **)&res_device, resmemsize);
 
   timer time;
-  mandelbrot<<<grid, block>>>(res_device, width, height, xmin, xmax, ymin, ymax,
-                              maxiterations);
+  mandelbrot<<<grid, block>>>(res_device, width, height, xmin,
+                              (xmax - xmin) / (width - 1.0), ymin,
+                              (ymax - ymin) / (height - 1.0), maxiterations);
   cudaDeviceSynchronize();
 
   cudaMemcpy(res, res_device, resmemsize, cudaMemcpyDeviceToHost);

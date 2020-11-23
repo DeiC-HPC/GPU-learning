@@ -59,8 +59,8 @@ int main() {
     im[i] = ymax - ((ymax - ymin) * i / (height - 1));
   }
 
-  cudaMemcpy(re_device, re, floatmemsize, cudaMemcpyHostToDevice);
-  cudaMemcpy(im_device, im, floatmemsize, cudaMemcpyHostToDevice);
+  cudaMemcpy(re_device, re, width * sizeof(float), cudaMemcpyHostToDevice);
+  cudaMemcpy(im_device, im, height * sizeof(float), cudaMemcpyHostToDevice);
 
   mandelbrot<<<grid, block>>>(re_device, im_device, res_device, width, height,
                               maxiterations);

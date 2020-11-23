@@ -20,12 +20,12 @@ mod = SourceModule("""
             int y = blockIdx.y*blockDim.y+threadIdx.y;
 
             if (x < width && y < height) {
-                cuFloatComplex z = zs[x*width+y];
+                cuFloatComplex z = zs[y*width+x];
                 cuFloatComplex c = z;
 
                 for (int i = 0; i < max_iterations; i++) {
                     if (z.x*z.x + z.y*z.y <= 4.0f) {
-                        res[x*width+y] = i+1;
+                        res[y*width+x] = i+1;
                         z = cuCmulf(z, z);
                         z = cuCaddf(z, c);
                     }

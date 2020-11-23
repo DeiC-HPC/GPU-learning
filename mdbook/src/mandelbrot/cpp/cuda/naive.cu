@@ -75,6 +75,7 @@ int main() {
     cudaDeviceSynchronize();
 
     cudaMemcpy(res, res_device, resmemsize, cudaMemcpyDeviceToHost);
+    end = clock();
 
     ofstream file;
     file.open("mandelbrot_naive.csv");
@@ -90,7 +91,6 @@ int main() {
     }
 
     file.close();
-    end = clock();
 
     printf("Elapsed time: %f\n", (double)(end-start)/CLOCKS_PER_SEC);
 

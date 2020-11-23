@@ -2,7 +2,7 @@
 #include<fstream>
 #include<complex>
 #include<cmath>
-#include<time.h>
+#include<timer.h>
 
 using namespace std;
 
@@ -29,10 +29,9 @@ int main() {
     float xmin = -2.5;
     float xmax = 1.5;
     ofstream file;
-    clock_t start,end;
-    int* res = (int*)malloc(height*width*sizeof(int));
+    int* res = new int[width*height];
 
-    start = clock();
+    timer time;
     #pragma omp target teams distribute parallel for collapse(2) map(from:res[:height*width])
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
@@ -43,6 +42,7 @@ int main() {
                     maxiterations);
         }
     }
+    cout << "Elapsed time: " << time.getTime() << endl;
 
     file.open("mandelbrot_openmp.csv");
     for (int i = 0; i < height; i++) {
@@ -56,9 +56,6 @@ int main() {
     }
 
     file.close();
-    end = clock();
-
-    printf("Elapsed time: %f\n", (double)(end-start)/CLOCKS_PER_SEC);
 
     return 0;
 }

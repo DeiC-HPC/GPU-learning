@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pyopencl as cl
+import time
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()
@@ -49,6 +50,7 @@ ymax = 2.0
 reals = np.linspace(xmin, xmax, width)
 imaginaries = np.linspace(ymax, ymin, height) * 1j
 
+start_time = time.time()
 # Creating a combination of all values in the two lists
 zs = (reals+imaginaries[:, np.newaxis]).flatten().astype(np.complex64)
 
@@ -72,6 +74,7 @@ cl.enqueue_copy(queue, res, res_dev).wait()
 
 # Setting shape of array to help displaying it
 res.shape = (width, height)
+total_time_naive = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

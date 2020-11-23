@@ -4,6 +4,7 @@ import pycuda.driver as cuda
 import pycuda.autoinit
 from pycuda.compiler import SourceModule
 import math
+import time
 
 mod = SourceModule("""
         #include "cuComplex.h"
@@ -40,6 +41,7 @@ xmin = -2.5
 xmax = 1.5
 ymin = -2.0
 ymax = 2.0
+start_time = time.time()
 reals = np.linspace(xmin, xmax, width)
 imaginaries = np.linspace(ymax, ymin, height) * 1j
 
@@ -69,6 +71,7 @@ mandelbrot(
 
 # Setting shape of array to help displaying it
 res.shape = (width, height)
+total_time_naive = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

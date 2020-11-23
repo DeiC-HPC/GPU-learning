@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pyopencl as cl
+import time
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()
@@ -55,6 +56,7 @@ ymin = -2.0
 ymax = 2.0
 res = np.empty(width*height).astype(np.int32)
 
+start_time = time.time()
 mf = cl.mem_flags
 res_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=res.nbytes)
 
@@ -75,6 +77,7 @@ cl.enqueue_copy(queue, res, res_dev).wait()
 
 # Setting shape of array to help displaying it
 res.shape = (width, height)
+total_time_gpu_only = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

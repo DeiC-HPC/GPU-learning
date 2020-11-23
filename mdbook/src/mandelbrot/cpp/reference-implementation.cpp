@@ -2,7 +2,7 @@
 #include<fstream>
 #include<complex>
 #include<cmath>
-#include<time.h>
+#include<timer.h>
 
 using namespace std;
 
@@ -28,29 +28,34 @@ int main() {
     float ymax = 2.0;
     float xmin = -2.5;
     float xmax = 1.5;
+    int* res = new int[width*height];
     ofstream file;
-    file.open("mandelbrot.csv");
-    clock_t start,end;
 
-    start = clock();
+    timer time;
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            if (j != 0) {
-                file << ",";
-            }
-            file << mandelbrot(
+            res[i*width+j] = mandelbrot(
                     complex<float>(
                         xmin + ((xmax-xmin)*j/(width-1)),
                         ymax - ((ymax-ymin)*i/(height-1))),
                     maxiterations);
         }
+    }
+
+    cout << "Elapsed time: " << time.getTime() << endl;
+
+    file.open("mandelbrot.csv");
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            if (j != 0) {
+                file << ",";
+            }
+            file << res[i*width+j];
+        }
         file << endl;
     }
 
     file.close();
-    end = clock();
-
-    printf("Elapsed time: %f\n", (double)(end-start)/CLOCKS_PER_SEC);
 
     return 0;
 }

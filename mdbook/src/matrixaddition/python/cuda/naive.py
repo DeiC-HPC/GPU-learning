@@ -4,6 +4,7 @@ import pycuda.driver as cuda
 import pycuda.autoinit
 from pycuda.compiler import SourceModule
 import math
+import time
 
 mod = SourceModule("""
         __global__ void matrixaddition(
@@ -35,6 +36,7 @@ dim_size = 1024
 block_size = (dim_size,1,1)
 grid_size = (int(math.ceil(height / float(dim_size))),1)
 
+start_time = time.time()
 matrixaddition = mod.get_function("matrixaddition")
 matrixaddition(
         cuda.In(a),
@@ -44,5 +46,6 @@ matrixaddition(
         np.uint16(height),
         block=block_size,
         grid=grid_size)
+total_time_outer = time.time() - start_time
 
 print(res)

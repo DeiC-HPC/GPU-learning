@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import pyopencl as cl
+import time
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()
@@ -35,6 +36,7 @@ a_dev = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
 b_dev = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=b)
 res_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=res.nbytes)
 
+start_time = time.time()
 prg.matrixaddition(
         queue,
         (width,),
@@ -46,5 +48,6 @@ prg.matrixaddition(
         np.uint16(height))
 
 cl.enqueue_copy(queue, res, res_dev).wait()
+total_time_inner = time.time() - start_time
 
 print(res)

@@ -46,6 +46,7 @@ ymax = 2.0
 start_time = time.time()
 reals = np.linspace(xmin, xmax, width).astype(np.float32)
 imaginaries = np.linspace(ymax, ymin, height).astype(np.float32)
+
 res = np.empty(width*height).astype(np.int32)
 
 if width > 512:

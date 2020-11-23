@@ -32,7 +32,7 @@ int main() {
   int *res = new int[width * height];
 
   timer time;
-#pragma acc parallel loop collapse(2) copyout(res[:width * height])
+  #pragma acc parallel loop collapse(2) copyout(res[:width * height])
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] =

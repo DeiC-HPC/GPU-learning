@@ -15,7 +15,7 @@ end function mandelbrot
 ! ANCHOR_END: mandelbrot
 
 PROGRAM mandelbrot_openacc
-    integer, parameter :: n = 2000
+    integer, parameter :: n = 1000
     integer, parameter :: maxi = 100
     integer, parameter :: out_unit = 20
     real :: start, finish

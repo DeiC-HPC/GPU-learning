@@ -1,18 +1,15 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include <timer.h>
 
 using namespace std;
 
 int main() {
   int height = 10000;
   int width = 10000;
-  int memsize = width * height * sizeof(int);
-  clock_t start, end;
 
-  int *a = (int *)malloc(memsize);
-  int *b = (int *)malloc(memsize);
-  int *res = (int *)malloc(memsize);
+  int *a = new int[width * height];
+  int *b = new int[width * height];
+  int *res = new int[width * height];
 
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
@@ -21,21 +18,17 @@ int main() {
     }
   }
 
-  start = clock();
-
-  #pragma omp target teams distribute parallel for \
-      map(to: a[:width * height]) \
-      map(to: b[:width * height]) \
-      map(from: res[:width * height])
-  for (int j = 0; j < width; j++) {
-    for (int i = 0; i < height; i++) {
+  timer time;
+  #pragma acc parallel loop \
+      copyin(a[:width * height]) \
+      copyin(b[:width * height]) \
+      copyout(res[:width * height])
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
       res[i * width + j] = a[i * width + j] + b[i * width + j];
     }
   }
-
-  end = clock();
-
-  printf("Elapsed time: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+  cout << "Elapsed time: " << time.getTime() << endl;
 
   bool allElementsAre2 = true;
   for (int i = 0; i < height; i++) {

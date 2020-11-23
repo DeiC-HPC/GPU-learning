@@ -30,7 +30,6 @@ PROGRAM matrixaddition
         enddo
     enddo
 
-
     print *, "time:", end_time - start_time, "seconds"
     if (allElementsAre2) then
         print *, "All numbers in matrix are 2"

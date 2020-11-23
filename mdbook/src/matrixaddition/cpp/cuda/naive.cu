@@ -1,6 +1,5 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include <timer.h>
 
 using namespace std;
 
@@ -22,7 +21,6 @@ int main() {
   int dimx = ceil(((float)height) / blocksize);
   dim3 block(blocksize, 1, 1), grid(dimx, 1, 1);
   int memsize = width * height * sizeof(int);
-  clock_t start, end;
 
   int *a, *b, *res;
   cudaMallocManaged(&a, memsize);
@@ -36,14 +34,10 @@ int main() {
     }
   }
 
-  start = clock();
-
+  timer time;
   matrixaddition<<<grid, block>>>(a, b, res, width, height);
   cudaDeviceSynchronize();
-
-  end = clock();
-
-  printf("Elapsed time: %f\n", (double)(end - start) / CLOCKS_PER_SEC);
+  cout << "Elapsed time: " << time.getTime() << endl;
 
   bool allElementsAre2 = true;
   for (int i = 0; i < height; i++) {

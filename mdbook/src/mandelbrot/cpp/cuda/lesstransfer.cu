@@ -1,13 +1,13 @@
 #include "cuComplex.h"
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
 #include <timer.h>
 
 #define T 32
 
 using namespace std;
 
+/* ANCHOR: mandelbrot */
 __global__ void mandelbrot(const float *re, const float *im, int *res,
                            ushort width, ushort height, ushort max_iterations) {
   int x = blockIdx.x * blockDim.x + threadIdx.x;
@@ -26,6 +26,7 @@ __global__ void mandelbrot(const float *re, const float *im, int *res,
     }
   }
 }
+/* ANCHOR_END: mandelbrot */
 
 int main() {
   int width = 1000;
@@ -39,13 +40,12 @@ int main() {
   int dimy = ceil(((float)height) / T);
   dim3 block(T, T, 1), grid(dimx, dimy, 1);
   int resmemsize = width * height * sizeof(int);
-  int floatmemsize = width * height * sizeof(float);
 
-  float *im = (float *)malloc(floatmemsize);
-  float *re = (float *)malloc(floatmemsize);
-  float *im_device, *re_device;
-  cudaMalloc((void **)&im_device, floatmemsize);
-  cudaMalloc((void **)&re_device, floatmemsize);
+  float *re = new float[width];
+  float *im = new float[height];
+  float *re_device, *im_device;
+  cudaMalloc((void **)&re_device, width * sizeof(float));
+  cudaMalloc((void **)&im_device, height * sizeof(float));
 
   int *res = new int[width * height];
   int *res_device;

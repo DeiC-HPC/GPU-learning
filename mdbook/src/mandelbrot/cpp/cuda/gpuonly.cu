@@ -1,13 +1,13 @@
 #include "cuComplex.h"
 #include <fstream>
 #include <iostream>
-#include <stdlib.h>
 #include <timer.h>
 
 #define T 32
 
 using namespace std;
 
+/* ANCHOR: mandelbrot */
 __global__ void mandelbrot(int *res, ushort width, ushort height, float xmin,
                            float xmax, float ymin, float ymax,
                            ushort max_iterations) {
@@ -31,6 +31,7 @@ __global__ void mandelbrot(int *res, ushort width, ushort height, float xmin,
     }
   }
 }
+/* ANCHOR_END: mandelbrot */
 
 int main() {
   int width = 1000;

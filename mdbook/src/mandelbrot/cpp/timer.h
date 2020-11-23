@@ -28,7 +28,7 @@ public:
     bool old = is_stopped;
     if (!is_stopped) {
       clock_gettime(CLOCK_MONOTONIC, &end);
-    is_stopped = true;
+      is_stopped = true;
     }
     return old;
   }

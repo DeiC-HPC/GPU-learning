@@ -34,12 +34,12 @@ int main() {
 
   timer time;
   #pragma omp target teams distribute parallel for collapse(2) \
-      map(from: res[:height * width])
+      map(from: res[:width * height])
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] =
           mandelbrot(complex<float>(xmin + ((xmax - xmin) * j / (width - 1)),
-                                    ymax - ((ymax - ymin) * i / (height - 1))),
+                                    ymin + ((ymax - ymin) * i / (height - 1))),
                      maxiterations);
     }
   }

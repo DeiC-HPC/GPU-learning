@@ -35,7 +35,7 @@ int main() {
     for (int j = 0; j < width; j++) {
       res[i * width + j] =
           mandelbrot(complex<float>(xmin + ((xmax - xmin) * j / (width - 1)),
-                                    ymax - ((ymax - ymin) * i / (height - 1))),
+                                    ymin + ((ymax - ymin) * i / (height - 1))),
                      maxiterations);
     }
   }

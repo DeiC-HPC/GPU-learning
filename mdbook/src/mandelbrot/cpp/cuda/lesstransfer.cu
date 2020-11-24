@@ -56,7 +56,7 @@ int main() {
     re[i] = xmin + ((xmax - xmin) * i / (width - 1));
   }
   for (int i = 0; i < height; i++) {
-    im[i] = ymax - ((ymax - ymin) * i / (height - 1));
+    im[i] = ymin + ((ymax - ymin) * i / (height - 1));
   }
 
   cudaMemcpy(re_device, re, width * sizeof(float), cudaMemcpyHostToDevice);

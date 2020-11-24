@@ -34,7 +34,7 @@ PROGRAM mandelbrot_prog
             numbers(i,j) = mandelbrot( &
                 CMPLX( &
                     xmin + ((xmax-xmin)*j/(n-1)), &
-                    ymax - ((ymax-ymin)*i/(n-1)) &
+                    ymin + ((ymax-ymin)*i/(n-1)) &
                 ), &
                 maxi &
             )

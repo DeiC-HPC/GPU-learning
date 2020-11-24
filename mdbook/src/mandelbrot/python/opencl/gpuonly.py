@@ -21,18 +21,17 @@ prg = cl.Program(ctx, """
             __global int *res,
             ushort width,
             float xmin,
-            float xmax,
+            float xdelta,
             float ymin,
-            float ymax,
+            float ydelta,
             ushort max_iterations)
         {
             int x = get_global_id(0);
             int y = get_global_id(1);
-            float widthf = width - 1.0f;
 
             float2 z;
-            z.x = xmin + ((xmax-xmin)*x/widthf);
-            z.y = ymax - ((ymax-ymin)*y/widthf);
+            z.x = xmin + x*xdelta;
+            z.y = ymin + y*ydelta;
             float2 c = z;
 
             res[y*width+x] = 0;
@@ -70,9 +69,9 @@ prg.mandelbrot(
         res_dev,
         np.uint16(width),
         np.float32(xmin),
-        np.float32(xmax),
+        np.float32((xmax-xmin) / (width-1.0)),
         np.float32(ymin),
-        np.float32(ymax),
+        np.float32((ymax-ymin) / (height-1.0)),
         np.uint16(max_iterations))
 
 # Copying result from GPU to memory

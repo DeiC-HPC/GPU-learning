@@ -16,9 +16,9 @@ mod = SourceModule("""
             ushort width,
             ushort height,
             float xmin,
-            float xmax,
+            float xdelta,
             float ymin,
-            float ymax,
+            float ydelta,
             ushort max_iterations)
         {
             int x = blockIdx.x*blockDim.x+threadIdx.x;
@@ -28,8 +28,8 @@ mod = SourceModule("""
 
             if (x < width && y < height) {
                 cuFloatComplex z = make_cuFloatComplex(
-                    xmin + ((xmax-xmin)*x/widthf),
-                    ymax - ((ymax-ymin)*y/heightf));
+                    xmin + x*xdelta,
+                    ymin + y*ydelta);
                 cuFloatComplex c = z;
 
                 for (int i = 0; i < max_iterations; i++) {
@@ -71,9 +71,9 @@ mandelbrot(
         np.uint16(width),
         np.uint16(height),
         np.float32(xmin),
-        np.float32(xmax),
+        np.float32((xmax-xmin) / (width-1.0)),
         np.float32(ymin),
-        np.float32(ymax),
+        np.float32((ymax-ymin) / (height-1.0)),
         np.uint16(max_iterations),
         block=block_size,
         grid=grid_size)

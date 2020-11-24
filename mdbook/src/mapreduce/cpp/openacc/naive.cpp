@@ -1,16 +1,14 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include <timer.h>
 
 using namespace std;
 
 int main() {
   int num = 100000000;
-  int *elements = (int *)malloc(num * sizeof(num));
+  int *elements = new int[num];
   long res = 0;
-  clock_t start, end;
 
-  start = clock();
+  timer time;
 
   #pragma acc parallel loop copy(elements[:num])
   for (int i = 0; i < num; i++) {
@@ -22,9 +20,7 @@ int main() {
     res += elements[i];
   }
 
-  end = clock();
-
-  cout << "Elapsed time: " << (double)(end - start) / CLOCKS_PER_SEC << endl;
+  cout << "Elapsed time: " << time.getTime() << endl;
 
   cout << "The result is: " << res << endl;
 }

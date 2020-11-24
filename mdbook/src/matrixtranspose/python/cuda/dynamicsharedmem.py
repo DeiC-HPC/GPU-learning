@@ -1,8 +1,10 @@
+#!/usr/bin/env python
 import numpy as np
 import pycuda.driver as cuda
 import pycuda.autoinit
 from pycuda.compiler import SourceModule
 import math
+import time
 
 mod = SourceModule("""
         __global__ void matrixtranspose(
@@ -28,21 +30,21 @@ mod = SourceModule("""
         }
         """)
 
-
-width = 10000
-height = 10000
+width = 25000
+height = 25000
 
 a = np.arange(height * width).astype(np.int32)
 a.shape = (height, width)
 
 trA = np.empty((width, height)).astype(np.int32)
 
-dim_size = 16
+dim_size = 32
 block_size = (dim_size,dim_size,1)
 grid_size = (int(math.ceil(height / float(dim_size))),
              int(math.ceil(width / float(dim_size))))
 
 matrixtranspose = mod.get_function("matrixtranspose")
+start_time = time.time()
 matrixtranspose(
         cuda.In(a),
         cuda.Out(trA),
@@ -51,5 +53,6 @@ matrixtranspose(
         block=block_size,
         grid=grid_size,
         shared=dim_size**2*4)
+total_time_dyn_shared = time.time() - start_time
 
 print(trA)

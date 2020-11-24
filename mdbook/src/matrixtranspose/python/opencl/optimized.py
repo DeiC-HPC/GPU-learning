@@ -2,15 +2,16 @@
 import numpy as np
 import pyopencl as cl
 import math
+import time
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()
 queue = cl.CommandQueue(ctx)
 
-width = 10000
-height = 10000
+width = 25000
+height = 25000
 
-dim_size = 16
+dim_size = 32
 grid_size = (dim_size * int(math.ceil(height/float(dim_size))),
              dim_size * int(math.ceil(width/float(dim_size))))
 
@@ -56,6 +57,7 @@ mf = cl.mem_flags
 a_dev = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=a)
 trA_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=trA.nbytes)
 
+start_time = time.time()
 prg.matrixtranspose(
         queue,
         grid_size,
@@ -66,5 +68,6 @@ prg.matrixtranspose(
         np.uint16(height))
 
 cl.enqueue_copy(queue, trA, trA_dev).wait()
+total_time_shared = time.time() - start_time
 
 print(trA)

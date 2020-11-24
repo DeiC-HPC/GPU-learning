@@ -1,26 +1,24 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include <timer.h>
 
 using namespace std;
 
 int main() {
   int num = 500;
   int memsize = num * num * num;
-  long long *elements = (long long *)malloc(memsize * sizeof(long long));
-  clock_t start, end;
+  long long *elements = new long long[memsize];
 
-#pragma acc data copyout(elements[:memsize])
+  #pragma acc data copyout(elements[:memsize])
   {
-#pragma acc parallel loop
+    #pragma acc parallel loop
     for (long long i = 0; i < memsize; i++) {
       elements[i] = i;
     }
 
-    start = clock();
+    timer time;
 
     for (int j = 1; j < num; j++) {
-#pragma acc parallel loop collapse(2) present(elements[:memsize])
+      #pragma acc parallel loop collapse(2) present(elements[:memsize])
       for (int i = 0; i < num; i++) {
         for (int k = 0; k < num; k++) {
           elements[i * num * num + j * num + k] +=
@@ -28,11 +26,9 @@ int main() {
         }
       }
     }
+
+    cout << "Elapsed time: " << time.getTime() << endl;
   }
-
-  end = clock();
-
-  cout << "Elapsed time: " << (double)(end - start) / CLOCKS_PER_SEC << endl;
 
   cout << elements[memsize - 1] << endl;
 }

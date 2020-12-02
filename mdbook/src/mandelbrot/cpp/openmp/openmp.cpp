@@ -33,6 +33,7 @@ int main() {
   int *res = new int[width * height];
 
   timer time;
+  /* ANCHOR: loops */
   #pragma omp target teams distribute parallel for collapse(2) \
       map(from: res[:width * height])
   for (int i = 0; i < height; i++) {
@@ -43,6 +44,7 @@ int main() {
                      maxiterations);
     }
   }
+  /* ANCHOR_END: loops */
   cout << "Elapsed time: " << time.getTime() << endl;
 
   ofstream file;

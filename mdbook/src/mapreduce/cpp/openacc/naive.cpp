@@ -10,6 +10,7 @@ int main() {
 
   timer time;
 
+  /* ANCHOR: mapreduce */
   #pragma acc parallel loop copy(elements[:num])
   for (int i = 0; i < num; i++) {
     elements[i] = i;
@@ -19,6 +20,7 @@ int main() {
   for (int i = 0; i < num; i++) {
     res += elements[i];
   }
+  /* ANCHOR_END: mapreduce */
 
   cout << "Elapsed time: " << time.getTime() << endl;
 

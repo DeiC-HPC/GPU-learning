@@ -6,11 +6,30 @@ This part of the book is not relevant for you chosen environment. Please go
 
 {{#include mandelbrot-sequential-implementation.md}}
 
+1 How do we then use the GPU?
+-----------------------------
+**TODO**: Some intro text
 
+{:.pycuda pyopencl}
+**TODO**: Some text about importing modules
+
+{:.pycuda-code}
+```python
+{{#include ./mandelbrot/python/cuda/naive.py:import}}
+```
+
+{:.pyopencl-code}
+```python
+{{#include ./mandelbrot/python/opencl/naive.py:import}}
+```
+
+{:.cuda pycuda}
 Kernels, as the functions running on GPUs are called, have `__global__` before
 their return type and name. The return type will always be `void` because these
 functions does not return anything. Instead the data is copied to and from the
 GPU.
+
+{:.cuda-code pycuda-code}
 ```c++
 __global__ void someKernel(
     const float *readOnlyArgument,
@@ -20,15 +39,42 @@ __global__ void someKernel(
     int i = blockIdx.x*blockDim.x+threadIdx.x;
 }
 ```
+
+{:.cuda pycuda}
 With the code above we see three variables, blockIdx, blockDim, and threadIdx,
 that we have not defined. These will be instantiated when we are running and
 tell us know where we are running. When running our code, it is run in a grid of
 thread block. Each thread block can have up to 1024 threads and must be a power
 of 2.
 
+{:.pyopencl}
+Kernels, as the functions running on GPUs are called, have `__kernel` before
+their return type and name. The return type will always be `void` because these
+functions does not return anything. Instead the data is copied to and from the
+GPU. The kernels are compiled during runtime in OpenCL where they are loaded from
+a string. This can of course be loaded from a file but in our examples we have
+chosen not to as to keep the examples simpler.
+
+{:.pyopencl-code}
+```python
+prg = cl.Program(ctx, """
+    // Your code here
+    __kernel void SomeKernel(
+        __global const float *readOnlyArgument,
+        __global float *writeableArgument,
+        int someConstant)
+    {
+        int i = get_global_id(0);
+    }
+    """).build()
+```
+
+{:.cuda}
 So how do we allocate memory on the GPU and copy data to and from it. There are
 two ways that you can do this. Firstly you can use `cudaMalloc`, where you have
 control and choose when to copy to and from the GPU.
+
+{:.cuda-coda}
 ```c++
 float* numbers = (float*)malloc(n*sizeof(float));
 float* numbers_device;
@@ -41,8 +87,14 @@ cudaMemcpy(numbers, numbers_device, n*sizeof(float), cudaMemcpyDeviceToHost);
 
 ```
 
+
+**TODO**: write about running kernels and allocating memory
+
+{:.cuda}
 It is also possible to use `cudaMallocManaged`, where copying will be done for
 you. This can lead to worse performance.
+
+{:.cuda-code}
 ```c++
 float* someMem;
 cudaMallocManaged(&someMem, n*sizeof(float));
@@ -80,30 +132,17 @@ width and height to the function is because we are running in thread blocks, as
 described earlier. We could end up out of bounds of our array, which we do not
 want and therefore we have this `if`-statement.
 
+{:.cuda-code}
 ```c++
-__global__ void mandelbrot(
-    const cuFloatComplex *zs,
-    int *res,
-    ushort width,
-    ushort height,
-    ushort max_iterations)
-{
-    int x = blockIdx.x*blockDim.x+threadIdx.x;
-    int y = blockIdx.y*blockDim.y+threadIdx.y;
-
-    if (x < width && y < height) {
-        cuFloatComplex z = zs[x*width+y];
-        cuFloatComplex c = z;
-
-        for (int i = 0; i < max_iterations; i++) {
-            if (z.x*z.x + z.y*z.y <= 4.0f) {
-                res[x*width+y] = i+1;
-                z = cuCmulf(z, z);
-                z = cuCaddf(z, c);
-            }
-        }
-    }
-}
+{{#include ./mandelbrot/cpp/cuda/naive.cu:mandelbrot }}
+```
+{:.pycuda-code}
+```python
+{{#include ./mandelbrot/python/cuda/naive.py:mandelbrot }}
+```
+{:.pyopencl-code}
+```python
+{{#include ./mandelbrot/python/opencl/naive.py:mandelbrot }}
 ```
 
 
@@ -117,21 +156,17 @@ By sending our lists of real and imaginary parts, we can then combine them on
 the GPU saving both time and space, because we already have the coordinates of
 from our two global ids.
 
+{:.cuda-code}
 ```c++
-__global__ void mandelbrot(
-    const float *re,
-    const float *im,
-    int *res,
-    ushort width,
-    ushort height,
-    ushort max_iterations)
-{
-    int x = blockIdx.x*blockDim.x+threadIdx.x;
-    int y = blockIdx.y*blockDim.y+threadIdx.y;
-
-    if (x < height && y < width) {
-        cuFloatComplex z = make_cuFloatComplex(re[y], im[x]);
-        cuFloatComplex c = z;
+{{#include ./mandelbrot/cpp/cuda/lesstransfer.cu:mandelbrot }}
+```
+{:.pycuda-code}
+```python
+{{#include ./mandelbrot/python/cuda/lesstransfer.py:mandelbrot }}
+```
+{:.pyopencl-code}
+```python
+{{#include ./mandelbrot/python/opencl/lesstransfer.py:mandelbrot }}
 ```
 
 4 GPU only implementation
@@ -142,25 +177,15 @@ considerably, especially when calculating with a higher resolution. Of course we
 still need to transfer the result array from the GPU, which is the majority of
 our data transfer, but reducing data transfer should be a priority.
 
+{:.cuda-code}
 ```c++
-__global__ void mandelbrot(
-    int *res,
-    ushort width,
-    ushort height,
-    float xmin,
-    float xmax,
-    float ymin,
-    float ymax,
-    ushort max_iterations)
-{
-    int x = blockIdx.x*blockDim.x+threadIdx.x;
-    int y = blockIdx.y*blockDim.y+threadIdx.y;
-    float widthf = width - 1.0f;
-    float heightf = height - 1.0f;
-
-    if (x < height && y < width) {
-        cuFloatComplex z = make_cuFloatComplex(
-            xmin + ((xmax-xmin)*y/widthf),
-            ymax - ((ymax-ymin)*x/heightf));
-        cuFloatComplex c = z;
+{{#include ./mandelbrot/cpp/cuda/gpuonly.cu:mandelbrot }}
+```
+{:.pycuda-code}
+```python
+{{#include ./mandelbrot/python/cuda/gpuonly.py:mandelbrot }}
+```
+{:.pyopencl-code}
+```python
+{{#include ./mandelbrot/python/opencl/gpuonly.py:mandelbrot }}
 ```

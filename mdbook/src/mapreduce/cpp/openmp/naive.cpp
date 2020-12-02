@@ -12,6 +12,7 @@ int main() {
 
   start = clock();
 
+  /* ANCHOR: mapreduce */
   #pragma omp target teams distribute parallel for map(tofrom: elements[:num])
   for (int i = 0; i < num; i++) {
     elements[i] = i;
@@ -21,6 +22,7 @@ int main() {
   for (int i = 0; i < num; i++) {
     res += elements[i];
   }
+  /* ANCHOR_END: mapreduce */
 
   end = clock();
 

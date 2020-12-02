@@ -33,6 +33,27 @@ memory, which requires multiple reads of global memory.
 
 ![Every thread will read from a different block of memory](notcoalesced.png)
 
+{:.cuda-code pycuda-code}
+```c++
+{{#include ./matrixaddition/cpp/cuda/naive.cu:matrixaddition}}
+```
+{:.cpp-openmp-code}
+```c++
+{{#include ./matrixaddition/cpp/openmp/naive.cpp:matrixaddition}}
+```
+{:.cpp-openacc-code}
+```c++
+{{#include ./matrixaddition/cpp/openacc/naive.cpp:matrixaddition}}
+```
+{:.f90-openmp-code}
+```fortran
+{{#include ./matrixaddition/fortran/openmp/naive.f90:matrixaddition}}
+```
+{:.f90-openacc-code}
+```fortran
+{{#include ./matrixaddition/fortran/openacc/naive.f90:matrixaddition}}
+```
+
 3 Parallelising the inner loop
 ------------------------------
 To fix the error in the previous version, we instead parallelise the inner loop.
@@ -40,3 +61,24 @@ This means when we are reading data from global memory, then every data point is
 given to a thread and no data is fetched without being assigned to a thread.
 
 ![All threads read within the same block of memory](coalesced.png)
+
+{:.cuda-code pycuda-code}
+```c++
+{{#include ./matrixaddition/cpp/cuda/optimized.cu:matrixaddition}}
+```
+{:.cpp-openmp-code}
+```c++
+{{#include ./matrixaddition/cpp/openmp/optimized.cpp:matrixaddition}}
+```
+{:.cpp-openacc-code}
+```c++
+{{#include ./matrixaddition/cpp/openacc/optimized.cpp:matrixaddition}}
+```
+{:.f90-openmp-code}
+```fortran
+{{#include ./matrixaddition/fortran/openmp/optimized.f90:matrixaddition}}
+```
+{:.f90-openacc-code}
+```fortran
+{{#include ./matrixaddition/fortran/openacc/optimized.f90:matrixaddition}}
+```

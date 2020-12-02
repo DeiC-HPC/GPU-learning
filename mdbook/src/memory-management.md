@@ -37,38 +37,34 @@ look at a map reduce example. Map reduce refers to two operations normally used
 in functional programming. A map is where you do the same operation, for example
 adding two to each element, over every element in a list. Reduce is then taking a
 list and then reducing it to a single element. This could for example be getting
-the sum a list. If you're doing a reduction loop in OpenACC then you have to add
-the `reduction` clause to your OpenACC pragma. Inside the the reduction clause
-you set a reduction operator and then a number of variables. The possible
-reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`, and `||`.
+the sum a list. If you're doing a reduction loop then you have to add a
+`reduction` clause to your pragma. Inside the reduction clause you have to set a
+reduction operator and then a number of variables.
+
+{:.cpp-openacc cpp-openmp}
+The possible reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`,
+and `||`.
+
+{:.f90-openacc f90-openmp}
+The possible reduction operators are `+`, `*`, `max`, `min`, `iand`, `ior`,
+`ieor`, `.and.`, `.or`, `.eqv.`, and `.neqv`.
 
 The two programs are based around two loops the first being a map and the second
 being a reduce. In the not optimized program we copy variables in both loops.
 
 {:.f90-openacc-code}
 ```f90
-!$acc parallel loop copyout(elements)
-do i=1,num
-    elements(i) = i
-enddo
-
-!$acc parallel loop copyin(elements) reduction(+:res)
-do i=1,num
-    res = res + elements(i)
-enddo
+{{#include ./mapreduce/fortran/openacc/naive.f90:mapreduce}}
 ```
 {:.cpp-openmp-code}
 ```c++
-#pragma omp target teams distribute parallel for map(tofrom:elements[:num])
-for (int i = 0; i < num; i++) {
-    elements[i] = i;
-}
-
-#pragma omp target teams distribute parallel for reduction(+:res) map(tofrom:elements[:num]) map(from:res)
-for (int i = 0; i < num; i++) {
-    res += elements[i];
-}
+{{#include ./mapreduce/cpp/openmp/naive.cpp:mapreduce}}
 ```
+{:.cpp-openacc-code}
+```c++
+{{#include ./mapreduce/cpp/openacc/naive.cpp:mapreduce}}
+```
+
 In the optimized version we put the code into a data region and create the
 `elements` array on the GPU and then do our calculations so it is never copied.
 The only variable that is copied is the `res`. As copying variables and arrays
@@ -76,15 +72,13 @@ between CPU and GPU is an expensive operation then the goal is to limit that.
 
 {:.f90-openacc-code}
 ```f90
-!$acc data create(elements)
-!$acc parallel loop
-do i=1,num
-    elements(i) = i
-enddo
-
-!$acc parallel loop reduction(+:res)
-do i=1,num
-    res = res + elements(i)
-enddo
-!$acc end data
+{{#include ./mapreduce/fortran/openacc/optimized.f90:mapreduce}}
+```
+{:.cpp-openmp-code}
+```c++
+{{#include ./mapreduce/cpp/openmp/optimized.cpp:mapreduce}}
+```
+{:.cpp-openacc-code}
+```c++
+{{#include ./mapreduce/cpp/openacc/optimized.cpp:mapreduce}}
 ```

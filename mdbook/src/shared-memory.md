@@ -1,6 +1,6 @@
 # Shared Memory
 {:.cpp-openmp f90-openmp cpp-openacc f90-openacc}
-This concept is not included in this platform.
+This concept is not included in this environment.
 
 In this part we are going to talk about shared memory and how we can use it to
 improve performance.
@@ -13,12 +13,19 @@ to global memory as the latency is around 100 times lower. Also in cases where
 you have many local variables, it can also be an advantage to use shared memory
 as they could be pushed to global memory.
 
+{:.pycuda .cuda}
 To use shared memory, you have to mark your variable with `__shared__`, like so
 `__shared__ int array[10][10];`. Shared memory can also be allocated dynamically
 using the `extern` keyword. But you then have to add an extra argument, when
 running the kernel to define how much shared memory you need. This is done using
 a named argument called `shared`, where you define how many bytes of shared
 memory you need.
+
+{:.pyopencl}
+To use shared memory, you have to mark your variable with `__local`, like so
+`__local int array[10][10];`. When using arrays it is also worth noting that
+they can not be allocated with a dynamic size. This means that the size can not
+come from a variable and must be written in as a part of the kernel code.
 
 1 Matrix transposition
 ----------------------
@@ -96,6 +103,9 @@ __global__ void matrixtranspose(
 
 3 Dynamically allocated shared memory implementation
 ----------------------------------------------------
+{:.pyopencl}
+This feature does not exist in OpenCL
+
 In this implementation we will use dynamically allocated shared memory instead
 of allocating it directly in the kernel. It does not yield any specific
 performance benefit to dynamically allocate shared memory. But it will make the

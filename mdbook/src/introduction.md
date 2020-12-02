@@ -3,7 +3,7 @@ This book contains material for learning GPU programming in various programming
 environments. It is meant for people who are confident in solving their own
 problems on a CPU but needs more computing capabilities.
 
-_TODO__: GPUer er forskellige og kan ikke det samme
+__TODO__: GPUer er forskellige og kan ikke det samme
 
 Introduction
 ------------

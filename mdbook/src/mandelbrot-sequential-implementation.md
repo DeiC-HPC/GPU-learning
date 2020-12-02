@@ -30,30 +30,3 @@ To setup the function we have a lot of variables with default values defining wi
 Then we have two nested loops creating a complex number in the range of the minimum and maximum values and then calculating the mandelbrot function for each of these numbers.
 
 The data is then written to disk so we can visualize it and see the mandelbrot.
-
-{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
-This means that you mostly write your programs as you normally do but with some
-exceptions as we need to make it work on the GPU as well.
-
-{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
-When compiling there are several available options, but in this tutorial we will
-focus on GCC.
-
-{:.cpp-openacc f90-openacc}
-In GCC you add the flag `-fopenacc` when you want the compiler to understand the
-OpenACC pragmas. When you compile for the GPU then you will also need to use
-`-fno-stack-protector` as these checks will not work and cause the program to
-crash. If you use any math libraries then you will also need to add
-`-foffload=-lm`.
-
-{:.cpp-openmp f90-openmp}
-In GCC you add the flag `-fopenmp` when you want the compiler to understand the
-OpenMP pragmas. When you compile for the GPU then you will also need to use
-`-fno-stack-protector` as these checks will not work and cause the program to
-crash. If you use any math libraries then you will also need to add
-`-foffload=-lm`.
-
-{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
-If you are using CUDA 11 then you also have to add `-foffload="-misa=sm_35"` as
-the default currently is `sm_30`, which has been dropped. Also the only two
-options are `sm_30` and `sm_35`.

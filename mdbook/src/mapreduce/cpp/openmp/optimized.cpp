@@ -12,6 +12,7 @@ int main() {
 
   start = clock();
 
+  /* ANCHOR: mapreduce */
   #pragma omp target data map(alloc: elements[:num]) map(from: res)
   {
     #pragma omp target teams distribute parallel for
@@ -24,6 +25,7 @@ int main() {
       res += elements[i];
     }
   }
+  /* ANCHOR_END: mapreduce */
 
   end = clock();
 

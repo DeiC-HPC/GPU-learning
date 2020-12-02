@@ -19,6 +19,7 @@ int main() {
   }
 
   timer time;
+  /* ANCHOR: matrixaddition */
   #pragma omp target teams distribute parallel for \
       map(to: a[:width * height]) \
       map(to: b[:width * height]) \
@@ -28,6 +29,7 @@ int main() {
       res[i * width + j] = a[i * width + j] + b[i * width + j];
     }
   }
+  /* ANCHOR_END: matrixaddition */
   cout << "Elapsed time: " << time.getTime() << endl;
 
   bool allElementsAre2 = true;

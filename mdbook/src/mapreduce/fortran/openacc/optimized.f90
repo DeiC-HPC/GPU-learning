@@ -7,6 +7,7 @@ PROGRAM mapreduceoptimized
     allocate(elements(num))
 
     call cpu_time(start_time)
+    ! ANCHOR: mapreduce
     !$acc data create(elements)
     !$acc parallel loop
     do i=1,num
@@ -18,6 +19,7 @@ PROGRAM mapreduceoptimized
         res = res + elements(i)
     enddo
     !$acc end data
+    ! ANCHOR_END: mapreduce
     call cpu_time(end_time)
 
     print *, "time:", end_time - start_time, "seconds"

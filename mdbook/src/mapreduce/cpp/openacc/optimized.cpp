@@ -11,6 +11,7 @@ int main() {
 
   timer time;
 
+  /* ANCHOR: mapreduce */
   #pragma acc data create(elements[:num])
   {
     #pragma acc parallel loop
@@ -22,6 +23,7 @@ int main() {
       res += elements[i];
     }
   }
+  /* ANCHOR_END: mapreduce */
 
   cout << "Elapsed time: " << time.getTime() << endl;
 

@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+import time
+# ANCHOR: import
 import pycuda.driver as cuda
 import pycuda.autoinit
 from pycuda.compiler import SourceModule
-import math
-import time
+# ANCHOR_END: import
 
 # ANCHOR: mandelbrot
 mod = SourceModule("""

@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
-import pyopencl as cl
 import time
+# ANCHOR: import
+import pyopencl as cl
+# ANCHOR_END: import
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()

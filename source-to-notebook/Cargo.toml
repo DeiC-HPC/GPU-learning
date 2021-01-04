@@ -1,0 +1,14 @@
+[package]
+name = "source-to-notebook"
+version = "0.1.0"
+authors = ["Tethys Svensson <freaken@freaken.dk>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.37"
+paw = "1.0.0"
+serde = { version = "1.0.118", features = ["derive"] }
+serde_json = "1.0.61"
+structopt = { version = "0.3.20", features = ["paw", "color", "wrap_help", "suggestions"] }

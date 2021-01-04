@@ -68,7 +68,7 @@ SOMETHING
 
 {:.cpp-openacc-code}
 ```c++
-{{#include ./mandelbrot/cpp/openacc/openacc.cpp:mandelbrot}}
+{{#include ../../examples/mandelbrot/cpp/openacc/openacc.cpp:mandelbrot}}
 ```
 
 {:.cpp-openmp}
@@ -78,7 +78,7 @@ our offload target.
 
 {:.cpp-openmp-code}
 ```c++
-{{#include ./mandelbrot/cpp/openmp/openmp.cpp:mandelbrot}}
+{{#include ../../examples/mandelbrot/cpp/openmp/openmp.cpp:mandelbrot}}
 ```
 
 {:.f90-openmp}
@@ -87,7 +87,7 @@ should be compiled for our offload target.
 
 {:.f90-openmp-code}
 ```f90
-{{#include ./mandelbrot/fortran/openmp/openmp.f90:mandelbrot}}
+{{#include ../../examples/mandelbrot/fortran/openmp/openmp.f90:mandelbrot}}
 ```
 
 {:.f90-openacc}
@@ -96,7 +96,7 @@ that it should be compiled for our offload target.
 
 {:.f90-openacc-code}
 ```f90
-{{#include ./mandelbrot/fortran/openacc/openacc.f90:mandelbrot}}
+{{#include ../../examples/mandelbrot/fortran/openacc/openacc.f90:mandelbrot}}
 ```
 
 Before the loop we have a pragma
@@ -118,9 +118,9 @@ useful when using OpenACC together with another programming model.
 
 {:.cpp-openmp-code}
 ```c++
-{{#include ./mandelbrot/cpp/openmp/openmp.cpp:loops}}
+{{#include ../../examples/mandelbrot/cpp/openmp/openmp.cpp:loops}}
 ```
 {:.cpp-openacc-code}
 ```c++
-{{#include ./mandelbrot/cpp/openacc/openacc.cpp:loops}}
+{{#include ../../examples/mandelbrot/cpp/openacc/openacc.cpp:loops}}
 ```

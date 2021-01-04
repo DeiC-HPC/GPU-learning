@@ -15,12 +15,12 @@ This part of the book is not relevant for you chosen environment. Please go
 
 {:.pycuda-code}
 ```python
-{{#include ./mandelbrot/python/cuda/naive.py:import}}
+{{#include ../../examples/mandelbrot/python/cuda/naive.py:import}}
 ```
 
 {:.pyopencl-code}
 ```python
-{{#include ./mandelbrot/python/opencl/naive.py:import}}
+{{#include ../../examples/mandelbrot/python/opencl/naive.py:import}}
 ```
 
 {:.cuda pycuda}
@@ -134,15 +134,15 @@ want and therefore we have this `if`-statement.
 
 {:.cuda-code}
 ```c++
-{{#include ./mandelbrot/cpp/cuda/naive.cu:mandelbrot }}
+{{#include ../../examples/mandelbrot/cpp/cuda/naive.cu:mandelbrot }}
 ```
 {:.pycuda-code}
 ```python
-{{#include ./mandelbrot/python/cuda/naive.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/cuda/naive.py:mandelbrot }}
 ```
 {:.pyopencl-code}
 ```python
-{{#include ./mandelbrot/python/opencl/naive.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/opencl/naive.py:mandelbrot }}
 ```
 
 
@@ -158,15 +158,15 @@ from our two global ids.
 
 {:.cuda-code}
 ```c++
-{{#include ./mandelbrot/cpp/cuda/lesstransfer.cu:mandelbrot }}
+{{#include ../../examples/mandelbrot/cpp/cuda/lesstransfer.cu:mandelbrot }}
 ```
 {:.pycuda-code}
 ```python
-{{#include ./mandelbrot/python/cuda/lesstransfer.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/cuda/lesstransfer.py:mandelbrot }}
 ```
 {:.pyopencl-code}
 ```python
-{{#include ./mandelbrot/python/opencl/lesstransfer.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/opencl/lesstransfer.py:mandelbrot }}
 ```
 
 4 GPU only implementation
@@ -179,13 +179,13 @@ our data transfer, but reducing data transfer should be a priority.
 
 {:.cuda-code}
 ```c++
-{{#include ./mandelbrot/cpp/cuda/gpuonly.cu:mandelbrot }}
+{{#include ../../examples/mandelbrot/cpp/cuda/gpuonly.cu:mandelbrot }}
 ```
 {:.pycuda-code}
 ```python
-{{#include ./mandelbrot/python/cuda/gpuonly.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/cuda/gpuonly.py:mandelbrot }}
 ```
 {:.pyopencl-code}
 ```python
-{{#include ./mandelbrot/python/opencl/gpuonly.py:mandelbrot }}
+{{#include ../../examples/mandelbrot/python/opencl/gpuonly.py:mandelbrot }}
 ```

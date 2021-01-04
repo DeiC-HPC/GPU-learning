@@ -8,17 +8,17 @@ The sequential version contains a function called `mandelbrot`, which is all the
 
 {:.cuda-code cpp-openmp-code cpp-openacc-code}
 ```c++
-{{#include mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
+{{#include ../../examples/mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
 ```
 
 {:.f90-openmp-code f90-openacc-code}
 ```f90
-{{#include mandelbrot/fortran/reference-implementation.f90:mandelbrot}}
+{{#include ../../examples/mandelbrot/fortran/reference-implementation.f90:mandelbrot}}
 ```
 
 {:.pycuda-code pyopencl-code}
 ```python
-{{#include mandelbrot/python/reference-implementation.py:mandelbrot}}
+{{#include ../../examples/mandelbrot/python/reference-implementation.py:mandelbrot}}
 ```
 
 [Click here to see the entire example](https://github.com). TODO: Add link

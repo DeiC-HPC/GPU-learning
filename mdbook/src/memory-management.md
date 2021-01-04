@@ -54,15 +54,15 @@ being a reduce. In the not optimized program we copy variables in both loops.
 
 {:.f90-openacc-code}
 ```f90
-{{#include ./mapreduce/fortran/openacc/naive.f90:mapreduce}}
+{{#include ../../examples/mapreduce/fortran/openacc/naive.f90:mapreduce}}
 ```
 {:.cpp-openmp-code}
 ```c++
-{{#include ./mapreduce/cpp/openmp/naive.cpp:mapreduce}}
+{{#include ../../examples/mapreduce/cpp/openmp/naive.cpp:mapreduce}}
 ```
 {:.cpp-openacc-code}
 ```c++
-{{#include ./mapreduce/cpp/openacc/naive.cpp:mapreduce}}
+{{#include ../../examples/mapreduce/cpp/openacc/naive.cpp:mapreduce}}
 ```
 
 In the optimized version we put the code into a data region and create the
@@ -72,13 +72,13 @@ between CPU and GPU is an expensive operation then the goal is to limit that.
 
 {:.f90-openacc-code}
 ```f90
-{{#include ./mapreduce/fortran/openacc/optimized.f90:mapreduce}}
+{{#include ../../examples/mapreduce/fortran/openacc/optimized.f90:mapreduce}}
 ```
 {:.cpp-openmp-code}
 ```c++
-{{#include ./mapreduce/cpp/openmp/optimized.cpp:mapreduce}}
+{{#include ../../examples/mapreduce/cpp/openmp/optimized.cpp:mapreduce}}
 ```
 {:.cpp-openacc-code}
 ```c++
-{{#include ./mapreduce/cpp/openacc/optimized.cpp:mapreduce}}
+{{#include ../../examples/mapreduce/cpp/openacc/optimized.cpp:mapreduce}}
 ```

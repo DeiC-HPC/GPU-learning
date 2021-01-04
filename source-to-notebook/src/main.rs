@@ -33,6 +33,7 @@ fn main(args: Args) -> Result<()> {
     let lines = code
         .trim()
         .lines()
+        .filter(|line| !line.contains("ANCHOR"))
         .map(|line| format!("{}\n", line))
         .collect::<Vec<String>>();
     let cells = vec![schema::Cell {

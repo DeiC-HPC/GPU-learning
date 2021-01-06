@@ -17,25 +17,25 @@ There are a number of different approaches we can choose from.
 
 This guide has been written in multiple versions, depending on which platform you want to learn. You can change which version you are viewing to using the drop-down menu at the top. Try changing it now and see how the text below changes:
 
-{:.cuda}
+{:.code-info cuda}
 This is text is specific to the CUDA guide.
 
-{:.pycuda}
+{:.code-info pycuda}
 This is text is specific to the PyCUDA guide.
 
-{:.pyopencl}
+{:.code-info pyopencl}
 This is text is specific to the PyOpenCL guide.
 
-{:.cpp-openmp}
+{:.code-info cpp-openmp}
 This is text is specific to the OpenMP guide (in C++).
 
-{:.f90-openmp}
+{:.code-info f90-openmp}
 This is text is specific to the OpenMP guide (in Fortran).
 
-{:.cpp-openacc}
+{:.code-info cpp-openacc}
 This is text is specific to the OpenACC guide (in C++).
 
-{:.f90-openacc}
+{:.code-info f90-openacc}
 This is text is specific to the OpenACC guide (in Fortran).
 
 1 Choosing the right compiler

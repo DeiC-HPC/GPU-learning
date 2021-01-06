@@ -33,26 +33,47 @@ memory, which requires multiple reads of global memory.
 
 ![Every thread will read from a different block of memory](notcoalesced.png)
 
-{:.cuda-code pycuda-code}
+{:.code cuda}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/cuda/naive.cu:matrixaddition}}
 ```
-{:.cpp-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/cuda/naive.ipynb)
+
+{:.code pycuda}
+```c++
+{{#include ../../examples/matrixaddition/python/cuda/naive.py:matrixaddition}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/cuda/naive.ipynb)
+
+{:.code cpp-openmp}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/openmp/naive.cpp:matrixaddition}}
 ```
-{:.cpp-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/openmp/naive.ipynb)
+
+{:.code cpp-openacc}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/openacc/naive.cpp:matrixaddition}}
 ```
-{:.f90-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/openacc/naive.ipynb)
+
+{:.code f90-openmp}
 ```fortran
 {{#include ../../examples/matrixaddition/fortran/openmp/naive.f90:matrixaddition}}
 ```
-{:.f90-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/fortran/openmp/naive.ipynb)
+
+{:.code f90-openacc}
 ```fortran
 {{#include ../../examples/matrixaddition/fortran/openacc/naive.f90:matrixaddition}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/fortran/openacc/naive.ipynb)
 
 3 Parallelising the inner loop
 ------------------------------
@@ -62,23 +83,44 @@ given to a thread and no data is fetched without being assigned to a thread.
 
 ![All threads read within the same block of memory](coalesced.png)
 
-{:.cuda-code pycuda-code}
+{:.code cuda}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/cuda/optimized.cu:matrixaddition}}
 ```
-{:.cpp-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/cuda/optimized.ipynb)
+
+{:.code pycuda}
+```c++
+{{#include ../../examples/matrixaddition/python/cuda/optimized.py:matrixaddition}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/cuda/optimized.ipynb)
+
+{:.code cpp-openmp}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/openmp/optimized.cpp:matrixaddition}}
 ```
-{:.cpp-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/openmp/optimized.ipynb)
+
+{:.code cpp-openacc}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/openacc/optimized.cpp:matrixaddition}}
 ```
-{:.f90-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/cpp/openacc/optimized.ipynb)
+
+{:.code f90-openmp}
 ```fortran
 {{#include ../../examples/matrixaddition/fortran/openmp/optimized.f90:matrixaddition}}
 ```
-{:.f90-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/fortran/openmp/optimized.ipynb)
+
+{:.code f90-openacc}
 ```fortran
 {{#include ../../examples/matrixaddition/fortran/openacc/optimized.f90:matrixaddition}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/fortran/openacc/optimized.ipynb)

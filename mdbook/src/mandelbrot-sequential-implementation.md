@@ -14,15 +14,19 @@ The sequential version contains a function called `mandelbrot`, which is all the
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/reference-implementation.ipynb)
 
 
-{:.f90-openmp-code f90-openacc-code}
+{:.code f90-openmp f90-openacc}
 ```f90
 {{#include ../../examples/mandelbrot/fortran/reference-implementation.f90:mandelbrot}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/reference-implementation.ipynb)
 
-{:.pycuda-code pyopencl-code}
+{:.code pycuda pyopencl}
 ```python
 {{#include ../../examples/mandelbrot/python/reference-implementation.py:mandelbrot}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/reference-implementation.ipynb)
 
 It takes a complex number `z` and a maximum number of iterations to be run.
 

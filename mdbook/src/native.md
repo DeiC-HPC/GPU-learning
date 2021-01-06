@@ -1,6 +1,6 @@
 # Native
 
-{:.cpp-openmp cpp-openacc f90-openmp f90-openacc}
+{:.code-info cpp-openmp cpp-openacc f90-openmp f90-openacc}
 This part of the book is not relevant for you chosen environment. Please go
 [here](./directives.md) or change environment.
 
@@ -10,26 +10,37 @@ This part of the book is not relevant for you chosen environment. Please go
 -----------------------------
 **TODO**: Some intro text
 
-{:.pycuda pyopencl}
+{:.code-info pycuda pyopencl}
 **TODO**: Some text about importing modules
 
-{:.pycuda-code}
+{:.code cuda}
+```cpp
+{{#include ../../examples/mandelbrot/cpp/cuda/naive.cu:import}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/naive.ipynb)
+
+{:.code pycuda}
 ```python
 {{#include ../../examples/mandelbrot/python/cuda/naive.py:import}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/cuda/naive.ipynb)
 
-{:.pyopencl-code}
+{:.code pyopencl}
 ```python
 {{#include ../../examples/mandelbrot/python/opencl/naive.py:import}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/opencl/naive.ipynb)
 
-{:.cuda pycuda}
+{:.code-info cuda pycuda}
 Kernels, as the functions running on GPUs are called, have `__global__` before
 their return type and name. The return type will always be `void` because these
 functions does not return anything. Instead the data is copied to and from the
 GPU.
 
-{:.cuda-code pycuda-code}
+{:.code cuda pycuda}
 ```c++
 __global__ void someKernel(
     const float *readOnlyArgument,
@@ -40,14 +51,14 @@ __global__ void someKernel(
 }
 ```
 
-{:.cuda pycuda}
+{:.code-info cuda pycuda}
 With the code above we see three variables, blockIdx, blockDim, and threadIdx,
 that we have not defined. These will be instantiated when we are running and
 tell us know where we are running. When running our code, it is run in a grid of
 thread block. Each thread block can have up to 1024 threads and must be a power
 of 2.
 
-{:.pyopencl}
+{:.code-info pyopencl}
 Kernels, as the functions running on GPUs are called, have `__kernel` before
 their return type and name. The return type will always be `void` because these
 functions does not return anything. Instead the data is copied to and from the
@@ -55,7 +66,7 @@ GPU. The kernels are compiled during runtime in OpenCL where they are loaded fro
 a string. This can of course be loaded from a file but in our examples we have
 chosen not to as to keep the examples simpler.
 
-{:.pyopencl-code}
+{:.code pyopencl}
 ```python
 prg = cl.Program(ctx, """
     // Your code here
@@ -69,12 +80,12 @@ prg = cl.Program(ctx, """
     """).build()
 ```
 
-{:.cuda}
+{:.code-info cuda}
 So how do we allocate memory on the GPU and copy data to and from it. There are
 two ways that you can do this. Firstly you can use `cudaMalloc`, where you have
 control and choose when to copy to and from the GPU.
 
-{:.cuda-coda}
+{:.code cuda}
 ```c++
 float* numbers = (float*)malloc(n*sizeof(float));
 float* numbers_device;
@@ -90,11 +101,11 @@ cudaMemcpy(numbers, numbers_device, n*sizeof(float), cudaMemcpyDeviceToHost);
 
 **TODO**: write about running kernels and allocating memory
 
-{:.cuda}
+{:.code-info cuda}
 It is also possible to use `cudaMallocManaged`, where copying will be done for
 you. This can lead to worse performance.
 
-{:.cuda-code}
+{:.code cuda}
 ```c++
 float* someMem;
 cudaMallocManaged(&someMem, n*sizeof(float));
@@ -132,18 +143,26 @@ width and height to the function is because we are running in thread blocks, as
 described earlier. We could end up out of bounds of our array, which we do not
 want and therefore we have this `if`-statement.
 
-{:.cuda-code}
+{:.code cuda}
 ```c++
 {{#include ../../examples/mandelbrot/cpp/cuda/naive.cu:mandelbrot }}
 ```
-{:.pycuda-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/naive.ipynb)
+
+{:.code pycuda}
 ```python
 {{#include ../../examples/mandelbrot/python/cuda/naive.py:mandelbrot }}
 ```
-{:.pyopencl-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/cuda/naive.ipynb)
+
+{:.code pyopencl}
 ```python
 {{#include ../../examples/mandelbrot/python/opencl/naive.py:mandelbrot }}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/opencl/naive.ipynb)
 
 
 3 Less transfer implementation
@@ -156,18 +175,27 @@ By sending our lists of real and imaginary parts, we can then combine them on
 the GPU saving both time and space, because we already have the coordinates of
 from our two global ids.
 
-{:.cuda-code}
+{:.code cuda}
 ```c++
 {{#include ../../examples/mandelbrot/cpp/cuda/lesstransfer.cu:mandelbrot }}
 ```
-{:.pycuda-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/lesstransfer.ipynb)
+
+{:.code pycuda}
 ```python
 {{#include ../../examples/mandelbrot/python/cuda/lesstransfer.py:mandelbrot }}
 ```
-{:.pyopencl-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/cuda/lesstransfer.ipynb)
+
+
+{:.code pyopencl}
 ```python
 {{#include ../../examples/mandelbrot/python/opencl/lesstransfer.py:mandelbrot }}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/opencl/lesstransfer.ipynb)
 
 4 GPU only implementation
 -------------------------
@@ -177,15 +205,23 @@ considerably, especially when calculating with a higher resolution. Of course we
 still need to transfer the result array from the GPU, which is the majority of
 our data transfer, but reducing data transfer should be a priority.
 
-{:.cuda-code}
+{:.code cuda}
 ```c++
 {{#include ../../examples/mandelbrot/cpp/cuda/gpuonly.cu:mandelbrot }}
 ```
-{:.pycuda-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/gpuonly.ipynb)
+
+{:.code pycuda}
 ```python
 {{#include ../../examples/mandelbrot/python/cuda/gpuonly.py:mandelbrot }}
 ```
-{:.pyopencl-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/cuda/gpuonly.ipynb)
+
+{:.code pyopencl}
 ```python
 {{#include ../../examples/mandelbrot/python/opencl/gpuonly.py:mandelbrot }}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/opencl/gpuonly.ipynb)

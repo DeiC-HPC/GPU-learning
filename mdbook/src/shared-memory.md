@@ -1,5 +1,5 @@
 # Shared Memory
-{:.cpp-openmp f90-openmp cpp-openacc f90-openacc}
+{:.code-info cpp-openmp f90-openmp cpp-openacc f90-openacc}
 This concept is not included in this environment.
 
 In this part we are going to talk about shared memory and how we can use it to
@@ -13,7 +13,7 @@ to global memory as the latency is around 100 times lower. Also in cases where
 you have many local variables, it can also be an advantage to use shared memory
 as they could be pushed to global memory.
 
-{:.pycuda .cuda}
+{:.code-info pycuda .cuda}
 To use shared memory, you have to mark your variable with `__shared__`, like so
 `__shared__ int array[10][10];`. Shared memory can also be allocated dynamically
 using the `extern` keyword. But you then have to add an extra argument, when
@@ -21,7 +21,7 @@ running the kernel to define how much shared memory you need. This is done using
 a named argument called `shared`, where you define how many bytes of shared
 memory you need.
 
-{:.pyopencl}
+{:.code-info pyopencl}
 To use shared memory, you have to mark your variable with `__local`, like so
 `__local int array[10][10];`. When using arrays it is also worth noting that
 they can not be allocated with a dynamic size. This means that the size can not
@@ -59,7 +59,7 @@ shared memory to save the part of global memory, which is read by the thread
 block. We can then use this saved to write to the correct place in another
 thread to get coalesced access.
 
-{:.pycuda cuda}
+{:.code-info pycuda cuda}
 Before we go on, we have to introduce barriers. Barriers are a way to ensure
 that all threads, within a thread block, have reached a specific point before
 any can continue. This is useful especially when using larger kernels or shared
@@ -69,7 +69,7 @@ beyond a specific point. In CUDA we can use a barrier by calling the
 pass the same barrier at the same time. Using barriers in a different way will
 result in undefined behaviour.
 
-{:.pyopencl}
+{:.code-info pyopencl}
 To help us do this, we have to look closer at some features in OpenCL. Firstly
 we need to understand barriers. A barrier is a way to make sure that all threads
 are synchronised. It works by stopping threads continuing until all threads
@@ -83,13 +83,13 @@ Using barriers in a different way will result in undefined behaviour.
 ![One thread is yet to reach the barrier, so the two others are waiting](barrier.png)
 ![All threads have reached the barrier, so they now can continue](barrier.png)
 
-{:.cuda pycuda}
+{:.code-info cuda pycuda}
 To get coalesced access with share memory, we need to use the `blockIdx` to move
 our thread blocks. By swapping `blockIdx.x` and `blockIdx.y`, when we calculate
 our position, we can simply transpose within the block in shared memory and
 write that result to global memory.
 
-{:.pyopencl}
+{:.code-info pyopencl}
 Two additional things we need are `get_local_id` and `get_group_id`. These two
 functions works like `get_global_id`. `get_local_id` gets the current index in
 the thread block, we are working in, and `get_group_id` gets the index of the
@@ -126,7 +126,7 @@ __global__ void matrixtranspose(
 
 3 Dynamically allocated shared memory implementation
 ----------------------------------------------------
-{:.pyopencl}
+{:.code-info pyopencl}
 This feature does not exist in OpenCL
 
 In this implementation we will use dynamically allocated shared memory instead
@@ -134,21 +134,21 @@ of allocating it directly in the kernel. It does not yield any specific
 performance benefit to dynamically allocate shared memory. But it will make the
 kernel more general and you will need less code to handle changing block sizes.
 
-{:.cuda}
+{:.code-info cuda}
 We will also need to change the way we call our kernel by adding a third
 argument, defining the number of bytes needed, to the brackets in the function
 call.
 
-{:.cuda-code}
+{:.code cuda}
 ```c++
 matrixtranspose<<<grid, block, T*T*sizeof(int)>>>
 ```
 
-{:.pycuda}
+{:.code-info pycuda}
 We will also need to change the way we call our kernel by adding the argument
 `shared`, defining the number of bytes needed, to the function call.
 
-{:.pycuda-code}
+{:.code pycuda}
 ```python
 ```
 

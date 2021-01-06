@@ -11,22 +11,22 @@ In our previous examples we have moved data between CPU and GPU when doing our
 loops. The examples have also been fairly simple with only one loop. When working
 with bigger programs with many different loops.
 
-{:.cpp-openmp}
+{:.code-info cpp-openmp}
 Here we can either use `#pragma omp target data`, where we use curly brackets to
 create the scope for the data, or `#pragma omp target enter data` and
 `#pragma omp target exit data`.
 
-{:.cpp-openacc}
+{:.code-info cpp-openacc}
 Here we can either use `#pragma acc data`, where we use curly brackets to
 create the scope for the data, or `#pragma acc enter data` and
 `#pragma acc exit data`.
 
-{:.f90-openmp}
+{:.code-info f90-openmp}
 Here we can either use `$!omp target data`, where we use curly brackets to
 create the scope for the data, or `$!omp target enter data` and
 `$!omp target exit data`.
 
-{:.f90-openacc}
+{:.code-info f90-openacc}
 Here we can either use `$!acc data`, where we use curly brackets to create the
 scope for the data, or `$!acc enter data` and `$!acc exit data`.
 
@@ -41,44 +41,60 @@ the sum a list. If you're doing a reduction loop then you have to add a
 `reduction` clause to your pragma. Inside the reduction clause you have to set a
 reduction operator and then a number of variables.
 
-{:.cpp-openacc cpp-openmp}
+{:.code-info cpp-openacc cpp-openmp}
 The possible reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`,
 and `||`.
 
-{:.f90-openacc f90-openmp}
+{:.code-info f90-openacc f90-openmp}
 The possible reduction operators are `+`, `*`, `max`, `min`, `iand`, `ior`,
 `ieor`, `.and.`, `.or`, `.eqv.`, and `.neqv`.
 
 The two programs are based around two loops the first being a map and the second
 being a reduce. In the not optimized program we copy variables in both loops.
 
-{:.f90-openacc-code}
+{:.code f90-openacc}
 ```f90
 {{#include ../../examples/mapreduce/fortran/openacc/naive.f90:mapreduce}}
 ```
-{:.cpp-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/naive.ipynb)
+
+{:.code cpp-openmp}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openmp/naive.cpp:mapreduce}}
 ```
-{:.cpp-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openmp/naive.ipynb)
+
+{:.code cpp-openacc}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openacc/naive.cpp:mapreduce}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openacc/naive.ipynb)
 
 In the optimized version we put the code into a data region and create the
 `elements` array on the GPU and then do our calculations so it is never copied.
 The only variable that is copied is the `res`. As copying variables and arrays
 between CPU and GPU is an expensive operation then the goal is to limit that.
 
-{:.f90-openacc-code}
+{:.code f90-openacc}
 ```f90
 {{#include ../../examples/mapreduce/fortran/openacc/optimized.f90:mapreduce}}
 ```
-{:.cpp-openmp-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/optimzed.ipynb)
+
+{:.code cpp-openmp}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openmp/optimized.cpp:mapreduce}}
 ```
-{:.cpp-openacc-code}
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openmp/optimzed.ipynb)
+
+{:.code cpp-openacc}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openacc/optimized.cpp:mapreduce}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openacc/optimzed.ipynb)

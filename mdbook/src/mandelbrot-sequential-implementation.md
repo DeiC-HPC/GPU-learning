@@ -10,6 +10,7 @@ The sequential version contains a function called `mandelbrot`, which is all the
 ```c++
 {{#include ../../examples/mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
 ```
+[Code](/jupyter/lab/workspaces/baz/tree/mandelbrot/cpp/reference-implementation.ipynb)
 
 {:.f90-openmp-code f90-openacc-code}
 ```f90

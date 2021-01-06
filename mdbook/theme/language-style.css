@@ -1,36 +1,12 @@
-.cuda,
-.cuda-code,
-.cuda-code + pre,
-.cuda-code + pre + p a,
-.pycuda,
-.pycuda-code,
-.pycuda-code + pre,
-.pyopencl,
-.pyopencl-code,
-.pyopencl-code + pre,
-.cpp-openmp,
-.cpp-openmp-code,
-.cpp-openmp-code + pre,
-.cpp-openacc,
-.cpp-openacc-code,
-.cpp-openacc-code + pre,
-.f90-openmp,
-.f90-openmp-code,
-.f90-openmp-code + pre,
-.f90-openacc,
-.f90-openacc-code,
-.f90-openacc-code + pre
+.code,
+.code + pre,
+.code-link,
+.code-info
 {
   display: none;
 }
 
-.cuda-code + pre + .code-link,
-.pycuda-code + pre + .code-link,
-.pyopencl-code + pre + .code-link,
-.cpp-openmp-code + pre + .code-link,
-.cpp-openacc-code + pre + .code-link,
-.f90-openmp-code + pre + .code-link,
-.f90-openacc-code + pre + .code-link
+.code-link
 {
   float: right;
   display: block;
@@ -44,63 +20,27 @@
   margin: 0 !important;
 }
 
-.cuda,
-.cuda-code + pre,
-.pycuda,
-.pycuda-code + pre,
-.pyopencl,
-.pyopencl-code + pre,
-.cpp-openmp,
-.cpp-openmp-code + pre,
-.cpp-openacc,
-.cpp-openacc-code + pre,
-.f90-openmp,
-.f90-openmp-code + pre,
-.f90-openacc,
-.f90-openacc-code + pre
+.code + pre,
+.code-info
 {
   border: 3px #6e6b5e solid;
   margin-top: 25px;
   z-index: -1;
 }
 
-.cuda,
-.pycuda,
-.pyopencl,
-.cpp-openmp,
-.cpp-openacc,
-.f90-openmp,
-.f90-openacc
+.code-info
  {
   padding: 0px 30px;
 }
 
-.cuda-code + pre,
-.pycuda-code + pre,
-.pyopencl-code + pre,
-.cpp-openmp-code + pre,
-.cpp-openacc-code + pre,
-.f90-openmp-code + pre,
-.f90-openacc-code + pre
+.code + pre
 {
   background-color: #f1f1f1;
   padding-top: 7px;
 }
 
-.cuda:before,
-.cuda-code + pre:before,
-.pycuda:before,
-.pycuda-code + pre:before,
-.pyopencl:before,
-.pyopencl-code + pre:before,
-.cpp-openmp:before,
-.cpp-openmp-code + pre:before,
-.cpp-openacc:before,
-.cpp-openacc-code + pre:before,
-.f90-openmp:before,
-.f90-openmp-code + pre:before,
-.f90-openacc:before,
-.f90-openacc-code + pre:before
+.code-info:before,
+.code + pre:before
 {
   font-family: "Open Sans", sans-serif;
   content: var(--language);
@@ -110,25 +50,13 @@
   padding: 7px;
 }
 
-.cuda:before,
-.pycuda:before,
-.pyopencl:before,
-.cpp-openmp:before,
-.cpp-openacc:before,
-.f90-openmp:before,
-.f90-openacc:before
+.code-info:before
 {
   margin-top: -19px;
   margin-left: -15px;
 }
 
-.cuda-code + pre:before,
-.pycuda-code + pre:before,
-.pyopencl-code + pre:before,
-.cpp-openmp-code + pre:before,
-.cpp-openacc-code + pre:before,
-.f90-openmp-code + pre:before,
-.f90-openacc-code + pre:before
+.code + pre:before
 {
   margin-top: -26px;
   margin-left: 15px;

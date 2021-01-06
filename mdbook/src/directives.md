@@ -12,22 +12,22 @@ Before we start converting the program to run on GPUs, we need to lay some
 groundwork. We need to understand how to make the program run on the GPU and how
 to get our data to and from it.
 
-{:.cpp-openmp}
-OpenACC is a set of pragmas, which the compiler uses to optimize your code. These
+{:.code-info cpp-openmp}
+OpenMP is a set of pragmas, which the compiler uses to optimize your code. These
 directives start with `#pragma omp` where `omp` is the start of the OpenACC
 statement.
 
-{:.f90-openmp}
-OpenACC is a set of pragmas, which the compiler uses to optimize your code. These
+{:.code-info f90-openmp}
+OpenMP is a set of pragmas, which the compiler uses to optimize your code. These
 directives start with `$!omp` where `omp` is the start of the OpenACC
 statement.
 
-{:.cpp-openacc}
+{:.code-info cpp-openacc}
 OpenACC is a set of pragmas, which the compiler uses to optimize your code. These
 directives start with `#pragma acc` where `acc` is the start of the OpenACC
 statement.
 
-{:.f90-openacc}
+{:.code-info f90-openacc}
 OpenACC is a set of pragmas, which the compiler uses to optimize your code. These
 directives start with `$!acc` where `acc` is the start of the OpenACC
 statement.

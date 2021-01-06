@@ -6,7 +6,7 @@ When visualizing the Mandelbrot, one is also interested in how quickly this expr
 
 The sequential version contains a function called `mandelbrot`, which is all the logic we need to calculate the Mandelbrot set.
 
-{:.cuda-code cpp-openmp-code cpp-openacc-code}
+{:.code cuda cpp-openmp cpp-openacc}
 ```c++
 {{#include ../../examples/mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
 ```

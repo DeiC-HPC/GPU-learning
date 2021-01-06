@@ -10,7 +10,9 @@ The sequential version contains a function called `mandelbrot`, which is all the
 ```c++
 {{#include ../../examples/mandelbrot/cpp/reference-implementation.cpp:mandelbrot}}
 ```
-[Code](/jupyter/lab/workspaces/baz/tree/mandelbrot/cpp/reference-implementation.ipynb)
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/reference-implementation.ipynb)
+
 
 {:.f90-openmp-code f90-openacc-code}
 ```f90
@@ -21,8 +23,6 @@ The sequential version contains a function called `mandelbrot`, which is all the
 ```python
 {{#include ../../examples/mandelbrot/python/reference-implementation.py:mandelbrot}}
 ```
-
-[Click here to see the entire example](https://github.com). TODO: Add link
 
 It takes a complex number `z` and a maximum number of iterations to be run.
 

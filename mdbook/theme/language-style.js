@@ -6,7 +6,7 @@
   document.querySelector(".left-buttons").appendChild(select);
 
   function selectChange() {
-    sheet.innerHTML = select.value + " { display: block; } " + select.value + "-code + pre { display: block; }";
+    sheet.innerHTML = select.value + ", " + select.value + "-code + pre," + select.value + "-code + pre + p a { display: block; }";
     document.documentElement.style.setProperty("--language", '"' + select.options[select.selectedIndex].text + '"');
     window.localStorage.setItem("language", select.value);
   }

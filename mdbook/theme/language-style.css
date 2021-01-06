@@ -1,6 +1,7 @@
 .cuda,
 .cuda-code,
 .cuda-code + pre,
+.cuda-code + pre + p a,
 .pycuda,
 .pycuda-code,
 .pycuda-code + pre,
@@ -23,6 +24,26 @@
   display: none;
 }
 
+.cuda-code + pre + .code-link,
+.pycuda-code + pre + .code-link,
+.pyopencl-code + pre + .code-link,
+.cpp-openmp-code + pre + .code-link,
+.cpp-openacc-code + pre + .code-link,
+.f90-openmp-code + pre + .code-link,
+.f90-openacc-code + pre + .code-link
+{
+  float: right;
+  display: block;
+  background-color: #6e6b5e;
+  margin-top: -45px;
+  padding: 3px;
+}
+
+.code-link * {
+  color: #f1f1f1 !important;
+  margin: 0 !important;
+}
+
 .cuda,
 .cuda-code + pre,
 .pycuda,
@@ -40,6 +61,7 @@
 {
   border: 3px #6e6b5e solid;
   margin-top: 25px;
+  z-index: -1;
 }
 
 .cuda,

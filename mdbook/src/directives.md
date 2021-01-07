@@ -73,7 +73,6 @@ SOMETHING
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/openacc/openacc.ipynb)
 
-
 {:.code-info cpp-openmp}
 Around the mandelbrot function there has been added `#pragma omp declare target`
 and `#pragma omp end declare target`. this means that it should be compiled for
@@ -85,7 +84,6 @@ our offload target.
 ```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/openmp/openmp.ipynb)
-
 
 {:.code-info f90-openmp}
 Inside the mandelbrot function `$!acc routine` has been added. This means that it

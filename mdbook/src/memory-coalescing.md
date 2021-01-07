@@ -47,6 +47,13 @@ memory, which requires multiple reads of global memory.
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/cuda/naive.ipynb)
 
+{:.code pyopencl}
+```c++
+{{#include ../../examples/matrixaddition/python/opencl/naive.py:matrixaddition}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/opencl/naive.ipynb)
+
 {:.code cpp-openmp}
 ```c++
 {{#include ../../examples/matrixaddition/cpp/openmp/naive.cpp:matrixaddition}}
@@ -96,6 +103,13 @@ given to a thread and no data is fetched without being assigned to a thread.
 ```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/cuda/optimized.ipynb)
+
+{:.code pyopencl}
+```c++
+{{#include ../../examples/matrixaddition/python/opencl/optimized.py:matrixaddition}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/matrixaddition/python/opencl/optimized.ipynb)
 
 {:.code cpp-openmp}
 ```c++

@@ -14,6 +14,7 @@ mod = SourceModule("""
             ushort width,
             ushort height)
         {
+            /* ANCHOR: matrixaddition */
             int i = blockIdx.x*blockDim.x+threadIdx.x;
 
             if (i < width) {
@@ -21,6 +22,7 @@ mod = SourceModule("""
                     res[j*width+i] = a[j*width+i]+b[j*width+i];
                 }
             }
+            /* ANCHOR_END: matrixaddition */
         }
         """)
 

@@ -83,18 +83,18 @@ between CPU and GPU is an expensive operation then the goal is to limit that.
 {{#include ../../examples/mapreduce/fortran/openacc/optimized.f90:mapreduce}}
 ```
 {:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/optimzed.ipynb)
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/optimized.ipynb)
 
 {:.code cpp-openmp}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openmp/optimized.cpp:mapreduce}}
 ```
 {:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openmp/optimzed.ipynb)
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openmp/optimized.ipynb)
 
 {:.code cpp-openacc}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openacc/optimized.cpp:mapreduce}}
 ```
 {:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openacc/optimzed.ipynb)
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/cpp/openacc/optimized.ipynb)

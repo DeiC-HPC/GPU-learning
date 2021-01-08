@@ -64,7 +64,8 @@ The program does not change much from the original when adding the pragmas but
 let us take a look.
 
 {:.code-info cpp-openacc}
-SOMETHING
+Before the mandelbrot function there has been added `#pragma acc routine`. This
+means that it should be compiled for our offload target.
 
 {:.code cpp-openacc}
 ```c++
@@ -75,7 +76,7 @@ SOMETHING
 
 {:.code-info cpp-openmp}
 Around the mandelbrot function there has been added `#pragma omp declare target`
-and `#pragma omp end declare target`. this means that it should be compiled for
+and `#pragma omp end declare target`. This means that it should be compiled for
 our offload target.
 
 {:.code cpp-openmp}
@@ -123,8 +124,6 @@ already there. There is also `deviceptr` which says that the variable is already
 on the GPU and it is containing a pointer to the device memory. This is only
 useful when using OpenACC together with another programming model.
 
-**TODO**: Add loops around code as well
-
 {:.code cpp-openmp}
 ```c++
 {{#include ../../examples/mandelbrot/cpp/openmp/openmp.cpp:loops}}
@@ -139,3 +138,19 @@ useful when using OpenACC together with another programming model.
 ```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/openacc/openacc.ipynb)
+
+
+{:.code f90-openmp}
+```c++
+{{#include ../../examples/mandelbrot/fortran/openmp/openmp.f90:loops}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/openmp/openmp.ipynb)
+
+
+{:.code f90-openacc}
+```c++
+{{#include ../../examples/mandelbrot/fortran/openacc/openacc.f90:loops}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/openacc/openacc.ipynb)

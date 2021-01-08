@@ -1,7 +1,8 @@
+! ANCHOR: mandelbrot
 function mandelbrot(z, maxiterations) result(iterations)
     complex :: z, c
     integer maxinterations, iterations
-    !$acc routine
+    !$omp declare target
 
     c = z
     do iterations = 1, maxiterations
@@ -11,8 +12,9 @@ function mandelbrot(z, maxiterations) result(iterations)
         z = z*z + c
     end do
 end function mandelbrot
+! ANCHOR_END: mandelbrot
 
-PROGRAM mandelbrot_openacc
+PROGRAM mandelbrot_openmp
     integer, parameter :: n = 1000
     integer, parameter :: out_unit = 20
     real :: start, finish
@@ -28,7 +30,7 @@ PROGRAM mandelbrot_openacc
     allocate(numbers(n,n))
 
     call cpu_time(start_time)
-    ! ANCHOR: mandelbrot
+    ! ANCHOR: loops
     !$omp target teams distribute parallel do collapse(2) map(from:res)
     do i = 1,n
         do j = 1,n
@@ -41,10 +43,10 @@ PROGRAM mandelbrot_openacc
             )
         end do
     end do
-    ! ANCHOR_END: mandelbrot
+    ! ANCHOR_END: loops
     call cpu_time(end_time)
 
-    open(out_unit, file = 'mandelbrot_openacc.csv')
+    open(out_unit, file = 'mandelbrot_openmp.csv')
     do i = 1,n
         do j = 1,n
             if (j .eq. n) then
@@ -59,4 +61,4 @@ PROGRAM mandelbrot_openacc
 
     print *, "time:", end_time - start_time, "seconds"
 
-END PROGRAM mandelbrot_openacc
+END PROGRAM mandelbrot_openmp

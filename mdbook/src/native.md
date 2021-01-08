@@ -13,10 +13,6 @@ This part of the book is not relevant for you chosen environment. Please go
 {:.code-info pycuda pyopencl}
 **TODO**: Some text about importing modules
 
-{:.code cuda}
-```cpp
-{{#include ../../examples/mandelbrot/cpp/cuda/naive.cu:import}}
-```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/naive.ipynb)
 
@@ -110,13 +106,13 @@ you. This can lead to worse performance.
 float* someMem;
 cudaMallocManaged(&someMem, n*sizeof(float));
 ```
-We will be using `cudaMallocManaged` throughout these examples for the sake of
-ease and understanding.
 
+{:.code-info cuda}
 When calling our kernel we need to define the dimensions of our kernel and
 thread blocks. As said earlier the have up to 1024 threads and each dimension
 must be a power of 2. The grid is then defined as the number of thread blocks we
 want in each dimension.
+{:.code cuda}
 ```c++
 dim3 grid(n,m,1);
 dim3 block(16,16,1);
@@ -124,8 +120,12 @@ dim3 block(16,16,1);
 someKernel<<< grid, block >>>(readable, writable, 5.0f);
 ```
 
+{:code-info pyopencl pycuda}
+**TODO**: Write about lauching kernels in python
+
 2 Naïve implementation
 ----------------------
+{:code-info cuda pycuda}
 In this version we have taken the naïve approach and done a direct translation
 of the program. To use the library for complex arithmetic, we start by writing
 `#include "cuComplex.h"`. This enables us to use the type `cuFloatComplex`, and
@@ -135,6 +135,9 @@ type called `float2`, a 2D floating point vector. CUDA has multiple types, which
 support vector types, those are char, uchar, short, ushort, int, uint,
 long, ulong, longlong, ulonglong, float, and double. The length of the vector
 types can be 2, 3, and 4.
+
+{:code-info pyopencl}
+**TODO**: write about code transformation in PyOpenCL
 
 The only translation we have done in this version is the `mandelbrot`
 function and the complex arithmetic, which means all data is still generated and

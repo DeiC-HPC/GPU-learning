@@ -30,6 +30,7 @@ PROGRAM mandelbrot_openacc
     allocate(numbers(n,n))
 
     call cpu_time(start_time)
+    ! ANCHOR: loops
     !$acc parallel loop collapse(2) copyout(numbers)
     do i = 1,n
         do j = 1,n
@@ -42,6 +43,7 @@ PROGRAM mandelbrot_openacc
             )
         end do
     end do
+    ! ANCHOR_END: loops
     call cpu_time(end_time)
 
     open(out_unit, file = 'mandelbrot_openacc.csv')

@@ -15,11 +15,13 @@ prg = cl.Program(ctx, """
             ushort width,
             ushort height)
         {
+            /* ANCHOR: matrixaddition */
             int i = get_global_id(0);
 
             for (int j = 0; j < height; j++) {
                 res[j*width+i] = a[j*width+i]+b[j*width+i];
             }
+            /* ANCHOR_END: matrixaddition */
         }
         """).build()
 

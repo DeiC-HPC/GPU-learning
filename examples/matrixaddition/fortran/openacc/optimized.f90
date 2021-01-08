@@ -14,12 +14,14 @@ PROGRAM matrixadditionoptimized
     b(:,:) = 1
 
     call cpu_time(start_time)
+    /* ANCHOR: matrixaddition */
     !$acc parallel loop copyin(a) copyin(b) copyout(res)
     do j = 1,width
         do i = 1,height
             res(i,j) = a(i,j) + b(i,j)
         enddo
     enddo
+    /* ANCHOR_END: matrixaddition */
     call cpu_time(end_time)
 
     do i = 1,height

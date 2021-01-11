@@ -1,4 +1,6 @@
-#include <assert.h>
+#include <algorithm>
+#include <cassert>
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <iostream>
@@ -21,7 +23,7 @@ vector<uint8_t> read_file(string path) {
   return data;
 }
 
-void write_file(string path, vector<uint8_t> data) {
+void write_file(string path, vector<uint8_t> &data) {
   ofstream outstream(path, ios::out | ios::binary);
   if (!outstream.is_open()) {
     cerr << "Could not open the file - '" << path << "'" << endl;
@@ -144,42 +146,103 @@ struct BmpPixelData {
   }
 };
 
-struct BmpPixelData parse_image(vector<uint8_t> &buf) {
-  static_assert(sizeof(BmpFileHeader) == 14);
-  static_assert(sizeof(BmpInfoHeader) == 40);
-  static_assert(sizeof(BmpHeader) == 14 + 40);
-  static_assert(alignof(BmpFileHeader) == 1);
-  static_assert(alignof(BmpInfoHeader) == 1);
-  static_assert(alignof(BmpHeader) == 1);
+struct FloatPixel {
+  float red;
+  float green;
+  float blue;
+};
 
-  assert(buf.size() >= sizeof(BmpHeader));
-
-  BmpHeader header = *((BmpHeader *)&buf[0]);
-  assert(header.is_valid());
-  assert(buf.size() >= checked_add(header.file_header.bfOffBits(),
-                                   header.info_header.total_bytes()));
-  return BmpPixelData{
-      .data = &buf[header.file_header.bfOffBits()],
-      .width = (uint32_t)header.info_header.biWidth(),
-      .height = (uint32_t)header.info_header.biHeight(),
-      .bytes_per_row = header.info_header.bytes_per_row(),
-  };
-}
-
-struct Image {
+struct FloatImage {
   uint32_t width;
   uint32_t height;
-  float *data;
+  FloatPixel *data;
+};
+
+class Bmp {
+private:
+  vector<uint8_t> buf;
+
+  BmpHeader *header() {
+    static_assert(sizeof(BmpFileHeader) == 14);
+    static_assert(sizeof(BmpInfoHeader) == 40);
+    static_assert(sizeof(BmpHeader) == 14 + 40);
+    static_assert(alignof(BmpFileHeader) == 1);
+    static_assert(alignof(BmpInfoHeader) == 1);
+    static_assert(alignof(BmpHeader) == 1);
+
+    assert(buf.size() >= sizeof(BmpHeader));
+
+    return (BmpHeader *)&buf[0];
+  }
+
+  BmpPixelData get_raw_pixels() {
+    BmpHeader *h = header();
+    assert(buf.size() >= checked_add(h->file_header.bfOffBits(),
+                                     h->info_header.total_bytes()));
+    BmpPixelData out;
+    out.data = &buf[h->file_header.bfOffBits()];
+    out.width = (uint32_t)h->info_header.biWidth();
+    out.height = (uint32_t)h->info_header.biHeight();
+    out.bytes_per_row = h->info_header.bytes_per_row();
+    return out;
+  }
+
+public:
+  Bmp() = delete;
+  Bmp(const Bmp &) = delete;
+  Bmp &operator=(const Bmp &) = delete;
+
+  Bmp(string path) : buf(read_file(path)) { assert(header()->is_valid()); }
+  void save(string path) { write_file(path, buf); }
+  FloatImage get_pixel_data() {
+    BmpPixelData pixel_data = get_raw_pixels();
+    uint32_t width = pixel_data.width;
+    uint32_t height = pixel_data.height;
+
+    FloatImage out;
+    out.width = pixel_data.width;
+    out.height = pixel_data.height;
+    out.data = new FloatPixel[checked_mul(width, height)];
+
+    for (uint64_t row = 0; row < height; row++) {
+      for (uint64_t col = 0; col < width; col++) {
+        auto pixel = &pixel_data.get_row(row)[col];
+        out.data[row * width + col].red = pixel->red / 255.0;
+        out.data[row * width + col].green = pixel->green / 255.0;
+        out.data[row * width + col].blue = pixel->blue / 255.0;
+      }
+    }
+    return out;
+  }
+
+  void set_pixel_data(FloatImage &im) {
+    BmpPixelData pixel_data = get_raw_pixels();
+    uint32_t width = pixel_data.width;
+    uint32_t height = pixel_data.height;
+
+    assert(im.width == width);
+    assert(im.height == height);
+
+    for (uint64_t row = 0; row < height; row++) {
+      for (uint64_t col = 0; col < width; col++) {
+        auto pixel = &pixel_data.get_row(row)[col];
+        pixel->red =
+            round(clamp(im.data[row * width + col].red, 0.0f, 1.0f) * 255.0);
+        pixel->green =
+            round(clamp(im.data[row * width + col].green, 0.0f, 1.0f) * 255.0);
+        pixel->blue =
+            round(clamp(im.data[row * width + col].blue, 0.0f, 1.0f) * 255.0);
+      }
+    }
+  }
 };
 
 int main() {
-  auto data = read_file("gottagofast.bmp");
-  auto pixel_data = parse_image(data);
-  for (uint64_t row = 0; row < pixel_data.height; row++) {
-    for (uint64_t col = 0; col < pixel_data.width; col++) {
-      auto pixel = &pixel_data.get_row(row)[col];
-      swap(pixel->red, pixel->green);
-    }
+  Bmp bmp("gottagofast.bmp");
+  FloatImage im = bmp.get_pixel_data();
+  for (uint64_t i = 0; i < im.height * im.width; i++) {
+    swap(im.data[i].red, im.data[i].green);
   }
-  write_file("converted.bmp", data);
+  bmp.set_pixel_data(im);
+  bmp.save("converted.bmp");
 }

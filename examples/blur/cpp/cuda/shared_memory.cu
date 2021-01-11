@@ -35,22 +35,44 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
   int x = blockIdx.x * blockDim.x + threadIdx.x;
   int y = blockIdx.y * blockDim.y + threadIdx.y;
 
+  __shared__ FloatPixel shared_pixels[T + FILTER_SIZE - 1][T + FILTER_SIZE - 1];
+
+  for (int dy = -FILTER_SIZE / 2; dy <= T + FILTER_SIZE / 2; dy += T) {
+    for (int dx = -FILTER_SIZE / 2; dx <= T + FILTER_SIZE / 2; dx += T) {
+      int nx = x + dx;
+      int ny = y + dy;
+      int sx = dx + threadIdx.x + FILTER_SIZE / 2;
+      int sy = dy + threadIdx.y + FILTER_SIZE / 2;
+      if (sx < T + FILTER_SIZE - 1 && sy < T + FILTER_SIZE - 1) {
+        if (0 <= nx && nx < width && 0 <= ny && ny < height) {
+          shared_pixels[sy][sx] = pixels_in[ny * width + nx];
+        } else {
+          shared_pixels[sy][sx] = FloatPixel{0.0, 0.0, 0.0};
+        }
+      }
+    }
+  }
+
+  __syncthreads();
+
   if (x < width && y < height) {
     float red = 0.0;
     float green = 0.0;
     float blue = 0.0;
     for (int dy = -FILTER_SIZE / 2; dy <= FILTER_SIZE / 2; dy++) {
       for (int dx = -FILTER_SIZE / 2; dx <= FILTER_SIZE / 2; dx++) {
-        int ny = y + dy;
-        int nx = x + dx;
-        if (0 <= ny && ny < height && 0 <= nx && nx < width) {
-          red += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
-                 pixels_in[ny * width + nx].red;
-          green += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
-                   pixels_in[ny * width + nx].green;
-          blue += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
-                  pixels_in[ny * width + nx].blue;
-        }
+        red += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
+               shared_pixels[threadIdx.y + dy + FILTER_SIZE / 2]
+                            [threadIdx.x + dx + FILTER_SIZE / 2]
+                                .red;
+        green += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
+                 shared_pixels[threadIdx.y + dy + FILTER_SIZE / 2]
+                              [threadIdx.x + dx + FILTER_SIZE / 2]
+                                  .green;
+        blue += filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2] *
+                shared_pixels[threadIdx.y + dy + FILTER_SIZE / 2]
+                             [threadIdx.x + dx + FILTER_SIZE / 2]
+                                 .blue;
       }
     }
     pixels_out[y * width + x].red = red;
@@ -87,5 +109,5 @@ int main() {
              cudaMemcpyDeviceToHost);
 
   bmp.set_pixel_data(im);
-  bmp.save("naive.bmp");
+  bmp.save("shared_memory.bmp");
 }

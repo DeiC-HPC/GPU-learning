@@ -22,13 +22,12 @@ create the scope for the data, or `#pragma acc enter data` and
 `#pragma acc exit data`.
 
 {:.code-info f90-openmp}
-Here we can either use `$!omp target data`, where we use curly brackets to
-create the scope for the data, or `$!omp target enter data` and
-`$!omp target exit data`.
+Here we can either use `!$omp target data` and `!$omp end target data` around
+your code or `!$omp target enter data` and `!$omp target exit data`.
 
 {:.code-info f90-openacc}
-Here we can either use `$!acc data`, where we use curly brackets to create the
-scope for the data, or `$!acc enter data` and `$!acc exit data`.
+Here we can either use `!$acc data` and `!$omp end data` around your code or
+`!$acc enter data` and `!$acc exit data`.
 
 1 Map reduce example
 --------------------
@@ -59,6 +58,13 @@ being a reduce. In the not optimized program we copy variables in both loops.
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/naive.ipynb)
 
+{:.code f90-openmp}
+```f90
+{{#include ../../examples/mapreduce/fortran/openmp/naive.f90:mapreduce}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openmp/naive.ipynb)
+
 {:.code cpp-openmp}
 ```c++
 {{#include ../../examples/mapreduce/cpp/openmp/naive.cpp:mapreduce}}
@@ -84,6 +90,13 @@ between CPU and GPU is an expensive operation then the goal is to limit that.
 ```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openacc/optimized.ipynb)
+
+{:.code f90-openmp}
+```f90
+{{#include ../../examples/mapreduce/fortran/openmp/optimized.f90:mapreduce}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mapreduce/fortran/openmp/optimized.ipynb)
 
 {:.code cpp-openmp}
 ```c++

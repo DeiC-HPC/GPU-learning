@@ -6,7 +6,7 @@ using namespace std;
 
 int main() {
   int num = 100000000;
-  int *elements = (int *)malloc(num * sizeof(num));
+  int *elements = new int[num];
   long res = 0;
   clock_t start, end;
 

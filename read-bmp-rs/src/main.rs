@@ -89,7 +89,7 @@ impl BmpInfoHeader {
     }
 
     fn bytes_per_row(&self) -> usize {
-        round_up(self.biWidth() as u32 * 3, 4) as usize
+        round_up((self.biWidth() as u32).checked_mul(3).unwrap(), 4) as usize
     }
 
     fn total_bytes(&self) -> usize {
@@ -212,6 +212,7 @@ fn main() {
         let header = *BmpHeader::parse(&data).unwrap();
         println!("{:?}", header);
         assert!(header.is_valid());
+        dbg!(header.info_header.biWidth());
         dbg!(header.info_header.bytes_per_row());
         dbg!(header.info_header.total_bytes());
         let data = &mut data[header.file_header.bfOffBits() as usize..];

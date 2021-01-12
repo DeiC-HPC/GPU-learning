@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 import time
 
 # ANCHOR: mandelbrot
@@ -21,18 +22,22 @@ xmax = 1.5
 ymin = -2.0
 ymax = 2.0
 
-start_time = time.time()
 # Creates a list of equally distributed numbers
 reals = np.linspace(xmin, xmax, width)
-imaginaries = np.linspace(ymin, ymax, height)
+imaginaries = np.linspace(ymin, ymax, height) * 1j
 
-# Empty array for result
-res = np.empty((width, height))
+# Creating a combination of all values in the two lists
+zs = (reals+imaginaries[:, np.newaxis]).flatten().astype(np.complex64)
 
-for i in range(width):
-    for j in range(height):
-        res[i, j] = mandelbrot(complex(reals[j], imaginaries[i]), max_iterations)
-total_time_seq = time.time() - start_time
+start_time = time.time()
+
+res = np.vectorize(mandelbrot)(zs, max_iterations)
+
+total_time = time.time() - start_time
+print("Elapsed time:", total_time)
+
+# Setting shape of array to help displaying it
+res.shape = (width, height)
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

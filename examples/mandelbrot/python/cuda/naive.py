@@ -47,7 +47,6 @@ xmax = 1.5
 ymin = -2.0
 ymax = 2.0
 
-start_time = time.time()
 # Creates a list of equally distributed numbers
 reals = np.linspace(xmin, xmax, width)
 imaginaries = np.linspace(ymin, ymax, height) * 1j
@@ -55,12 +54,11 @@ imaginaries = np.linspace(ymin, ymax, height) * 1j
 # Creating a combination of all values in the two lists
 zs = (reals+imaginaries[:, np.newaxis]).flatten().astype(np.complex64)
 
+start_time = time.time()
+
 res = np.empty(width*height).astype(np.int32)
 
-if width > 512:
-    dim_size = 32
-else:
-    dim_size = 16
+dim_size = 32
 block_size = (dim_size,dim_size,1)
 
 # Assuming width == height
@@ -77,9 +75,11 @@ mandelbrot(
         block=block_size,
         grid=grid_size)
 
+total_time = time.time() - start_time
+print("Elapsed time:", total_time)
+
 # Setting shape of array to help displaying it
 res.shape = (width, height)
-total_time_naive = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

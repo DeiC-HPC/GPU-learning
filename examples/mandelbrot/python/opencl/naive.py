@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 import time
 # ANCHOR: import
 import pyopencl as cl
@@ -52,7 +53,6 @@ xmax = 1.5
 ymin = -2.0
 ymax = 2.0
 
-start_time = time.time()
 # Creates a list of equally distributed numbers
 reals = np.linspace(xmin, xmax, width)
 imaginaries = np.linspace(ymin, ymax, height) * 1j
@@ -60,13 +60,18 @@ imaginaries = np.linspace(ymin, ymax, height) * 1j
 # Creating a combination of all values in the two lists
 zs = (reals+imaginaries[:, np.newaxis]).flatten().astype(np.complex64)
 
+start_time = time.time()
+
 res = np.empty(width*height).astype(np.int32)
 
 # Flags for memory on GPU
 mf = cl.mem_flags
+
+# Creating arrays on the GPU and transfering data
 zs_dev = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=zs)
 res_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=res.nbytes)
 
+# Running the kernel
 prg.mandelbrot(
         queue,
         (height, width),
@@ -79,9 +84,11 @@ prg.mandelbrot(
 # Copying result from GPU to memory
 cl.enqueue_copy(queue, res, res_dev).wait()
 
+total_time = time.time() - start_time
+print("Elapsed time:", total_time)
+
 # Setting shape of array to help displaying it
 res.shape = (width, height)
-total_time_naive = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
-import pyopencl as cl
+import math
 import time
+# ANCHOR: import
+import pyopencl as cl
+# ANCHOR_END: import
 
 # Getting context for running on the GPU
 ctx = cl.create_some_context()
@@ -29,9 +32,7 @@ prg = cl.Program(ctx, """
             int x = get_global_id(0);
             int y = get_global_id(1);
 
-            float2 z;
-            z.x = xmin + x*xdelta;
-            z.y = ymin + y*ydelta;
+            float2 z = (float2)(xmin + x*xdelta, ymin + y*ydelta);
             float2 c = z;
 
             res[y*width+x] = 0;
@@ -56,12 +57,16 @@ ymin = -2.0
 ymax = 2.0
 
 start_time = time.time()
+
 res = np.empty(width*height).astype(np.int32)
 
 # Flags for memory on GPU
 mf = cl.mem_flags
+
+# Creating arrays on the GPU and transfering data
 res_dev = cl.Buffer(ctx, mf.WRITE_ONLY, size=res.nbytes)
 
+# Running the kernel
 prg.mandelbrot(
         queue,
         (height, width),
@@ -77,9 +82,11 @@ prg.mandelbrot(
 # Copying result from GPU to memory
 cl.enqueue_copy(queue, res, res_dev).wait()
 
+total_time = time.time() - start_time
+print("Elapsed time:", total_time)
+
 # Setting shape of array to help displaying it
 res.shape = (width, height)
-total_time_gpu_only = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

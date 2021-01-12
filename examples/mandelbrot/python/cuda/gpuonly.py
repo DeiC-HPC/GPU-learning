@@ -1,11 +1,13 @@
 #!/usr/bin/env python
 import numpy as np
 import matplotlib.pyplot as plt
+import math
+import time
+# ANCHOR: import
 import pycuda.driver as cuda
 import pycuda.autoinit
 from pycuda.compiler import SourceModule
-import math
-import time
+# ANCHOR_END: import
 
 # ANCHOR: mandelbrot
 mod = SourceModule("""
@@ -23,8 +25,6 @@ mod = SourceModule("""
         {
             int x = blockIdx.x*blockDim.x+threadIdx.x;
             int y = blockIdx.y*blockDim.y+threadIdx.y;
-            float widthf = width - 1.0f;
-            float heightf = height - 1.0f;
 
             if (x < width && y < height) {
                 cuFloatComplex z = make_cuFloatComplex(
@@ -53,12 +53,10 @@ ymin = -2.0
 ymax = 2.0
 
 start_time = time.time()
+
 res = np.empty(width*height).astype(np.int32)
 
-if width > 512:
-    dim_size = 32
-else:
-    dim_size = 16
+dim_size = 32
 block_size = (dim_size,dim_size,1)
 
 # Assuming width == height
@@ -78,9 +76,11 @@ mandelbrot(
         block=block_size,
         grid=grid_size)
 
+total_time = time.time() - start_time
+print("Elapsed time:", total_time)
+
 # Setting shape of array to help displaying it
 res.shape = (width, height)
-total_time_gpu_only = time.time() - start_time
 
 # Displaying the Mandelbrot set
 fig, ax = plt.subplots()

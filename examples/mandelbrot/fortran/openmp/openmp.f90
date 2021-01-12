@@ -16,10 +16,10 @@ end function mandelbrot
 
 PROGRAM mandelbrot_openmp
     integer, parameter :: n = 1000
+    integer, parameter :: maxi = 100
     integer, parameter :: out_unit = 20
     real :: start, finish
     integer, dimension(:,:), allocatable :: numbers
-    integer, parameter :: maxi = 100
     real :: ymin, ymax, xmin, xmax
     real :: start_time, end_time
     ymin = -2.0
@@ -37,7 +37,7 @@ PROGRAM mandelbrot_openmp
             numbers(i,j) = mandelbrot( &
                 CMPLX( &
                     xmin + ((xmax-xmin)*j/(n-1)), &
-                    ymax - ((ymax-ymin)*i/(n-1)) &
+                    ymin + ((ymax-ymin)*i/(n-1)) &
                 ), &
                 maxi &
             )

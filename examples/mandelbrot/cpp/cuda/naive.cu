@@ -54,9 +54,9 @@ int main() {
     for (int j = 0; j < width; j++) {
       zs[i * width + j] =
           make_cuFloatComplex(
-	      xmin + ((xmax - xmin) * j / (width - 1)),
+              xmin + ((xmax - xmin) * j / (width - 1)),
               ymin + ((ymax - ymin) * i / (height - 1))
-	  );
+          );
     }
   }
 

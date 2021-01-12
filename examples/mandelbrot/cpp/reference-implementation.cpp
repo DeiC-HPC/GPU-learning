@@ -35,9 +35,9 @@ int main() {
     for (int j = 0; j < width; j++) {
       zs[i * width + j] =
           complex<float>(
-	      xmin + ((xmax - xmin) * j / (width - 1)),
+              xmin + ((xmax - xmin) * j / (width - 1)),
               ymin + ((ymax - ymin) * i / (height - 1))
-	  );
+          );
     }
   }
 
@@ -45,7 +45,7 @@ int main() {
 
   timer time;
 
-/* ANCHOR: loops */
+  /* ANCHOR: loops */
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] = mandelbrot(zs[i * width + j], maxiterations);

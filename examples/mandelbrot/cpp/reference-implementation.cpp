@@ -28,17 +28,31 @@ int main() {
   float ymax = 2.0;
   float xmin = -2.5;
   float xmax = 1.5;
+
+  complex<float> *zs = new complex<float>[width * height];
+
+  for (int i = 0; i < height; i++) {
+    for (int j = 0; j < width; j++) {
+      zs[i * width + j] =
+          complex<float>(
+	      xmin + ((xmax - xmin) * j / (width - 1)),
+              ymin + ((ymax - ymin) * i / (height - 1))
+	  );
+    }
+  }
+
   int *res = new int[width * height];
 
   timer time;
+
+/* ANCHOR: loops */
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      res[i * width + j] =
-          mandelbrot(complex<float>(xmin + ((xmax - xmin) * j / (width - 1)),
-                                    ymin + ((ymax - ymin) * i / (height - 1))),
-                     maxiterations);
+      res[i * width + j] = mandelbrot(zs[i * width + j], maxiterations);
     }
   }
+  /* ANCHOR_END: loops */
+
   cout << "Elapsed time: " << time.getTime() << endl;
 
   ofstream file;

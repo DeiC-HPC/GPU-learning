@@ -45,10 +45,6 @@ int main() {
   float ymax = 2.0;
   float xmin = -2.5;
   float xmax = 1.5;
-  int dimx = ceil(((float)width) / T);
-  int dimy = ceil(((float)height) / T);
-  dim3 block(T, T, 1), grid(dimx, dimy, 1);
-  int resmemsize = width * height * sizeof(int);
 
   cuFloatComplex *zs = new cuFloatComplex[width * height];
   cuFloatComplex *zs_device;
@@ -57,19 +53,25 @@ int main() {
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       zs[i * width + j] =
-          make_cuFloatComplex(xmin + ((xmax - xmin) * j / (width - 1)),
-                              ymin + ((ymax - ymin) * i / (height - 1)));
+          make_cuFloatComplex(
+	      xmin + ((xmax - xmin) * j / (width - 1)),
+              ymin + ((ymax - ymin) * i / (height - 1))
+	  );
     }
   }
 
   int *res = new int[width * height];
   int *res_device;
-  cudaMalloc((void **)&res_device, resmemsize);
+  cudaMalloc((void **)&res_device, width * height * sizeof(int));
 
   timer time;
 
   cudaMemcpy(zs_device, zs, width * height * sizeof(cuFloatComplex),
              cudaMemcpyHostToDevice);
+
+  int dimx = ceil(((float)width) / T);
+  int dimy = ceil(((float)height) / T);
+  dim3 block(T, T, 1), grid(dimx, dimy, 1);
 
   mandelbrot<<<grid, block>>>(
       zs_device,
@@ -80,7 +82,8 @@ int main() {
   );
   cudaDeviceSynchronize();
 
-  cudaMemcpy(res, res_device, resmemsize, cudaMemcpyDeviceToHost);
+  cudaMemcpy(res, res_device, width * height * sizeof(int), cudaMemcpyDeviceToHost);
+
   cout << "Elapsed time: " << time.getTime() << endl;
 
   ofstream file;

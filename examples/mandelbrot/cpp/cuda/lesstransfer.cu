@@ -46,14 +46,11 @@ int main() {
   float ymax = 2.0;
   float xmin = -2.5;
   float xmax = 1.5;
-  int dimx = ceil(((float)width) / T);
-  int dimy = ceil(((float)height) / T);
-  dim3 block(T, T, 1), grid(dimx, dimy, 1);
-  int resmemsize = width * height * sizeof(int);
 
   float *re = new float[width];
   float *im = new float[height];
-  float *re_device, *im_device;
+  float *re_device;
+  float *im_device;
   cudaMalloc((void **)&re_device, width * sizeof(float));
   cudaMalloc((void **)&im_device, height * sizeof(float));
 
@@ -66,12 +63,16 @@ int main() {
 
   int *res = new int[width * height];
   int *res_device;
-  cudaMalloc((void **)&res_device, resmemsize);
+  cudaMalloc((void **)&res_device, width * height * sizeof(int));
 
   timer time;
 
   cudaMemcpy(re_device, re, width * sizeof(float), cudaMemcpyHostToDevice);
   cudaMemcpy(im_device, im, height * sizeof(float), cudaMemcpyHostToDevice);
+
+  int dimx = ceil(((float)width) / T);
+  int dimy = ceil(((float)height) / T);
+  dim3 block(T, T, 1), grid(dimx, dimy, 1);
 
   mandelbrot<<<grid, block>>>(
       re_device,
@@ -83,7 +84,8 @@ int main() {
   );
   cudaDeviceSynchronize();
 
-  cudaMemcpy(res, res_device, resmemsize, cudaMemcpyDeviceToHost);
+  cudaMemcpy(res, res_device, width * height * sizeof(int), cudaMemcpyDeviceToHost);
+
   cout << "Elapsed time: " << time.getTime() << endl;
 
   ofstream file;

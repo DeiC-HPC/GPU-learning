@@ -8,23 +8,32 @@
 using namespace std;
 
 /* ANCHOR: mandelbrot */
-__global__ void mandelbrot(const cuFloatComplex *zs, int *res, ushort width,
-                           ushort height, ushort max_iterations) {
+__global__ void mandelbrot(
+    const cuFloatComplex *zs,
+    int *res,
+    ushort width,
+    ushort height,
+    ushort max_iterations) {
   int x = blockIdx.x * blockDim.x + threadIdx.x;
   int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-  if (x < width && y < height) {
-    cuFloatComplex z = zs[y * width + x];
-    cuFloatComplex c = z;
+  if (x >= width || y >= height) {
+    return;
+  }
 
-    for (int i = 0; i < max_iterations; i++) {
-      if (z.x * z.x + z.y * z.y <= 4.0f) {
-        res[y * width + x] = i + 1;
-        z = cuCmulf(z, z);
-        z = cuCaddf(z, c);
-      }
+  cuFloatComplex z = zs[y * width + x];
+  cuFloatComplex c = z;
+
+  int i;
+  for (i = 0; i < max_iterations; i++) {
+    if (z.x * z.x + z.y * z.y <= 4.0f) {
+      z = cuCmulf(z, z);
+      z = cuCaddf(z, c);
+    } else {
+      break;
     }
   }
+  res[y * width + x] = i;
 }
 /* ANCHOR_END: mandelbrot */
 
@@ -40,17 +49,11 @@ int main() {
   int dimy = ceil(((float)height) / T);
   dim3 block(T, T, 1), grid(dimx, dimy, 1);
   int resmemsize = width * height * sizeof(int);
-  int cufloatmemsize = width * height * sizeof(cuFloatComplex);
 
   cuFloatComplex *zs = new cuFloatComplex[width * height];
   cuFloatComplex *zs_device;
-  cudaMalloc((void **)&zs_device, cufloatmemsize);
+  cudaMalloc((void **)&zs_device, width * height * sizeof(cuFloatComplex));
 
-  int *res = new int[width * height];
-  int *res_device;
-  cudaMalloc((void **)&res_device, resmemsize);
-
-  timer time;
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       zs[i * width + j] =
@@ -59,10 +62,22 @@ int main() {
     }
   }
 
-  cudaMemcpy(zs_device, zs, cufloatmemsize, cudaMemcpyHostToDevice);
+  int *res = new int[width * height];
+  int *res_device;
+  cudaMalloc((void **)&res_device, resmemsize);
 
-  mandelbrot<<<grid, block>>>(zs_device, res_device, width, height,
-                              maxiterations);
+  timer time;
+
+  cudaMemcpy(zs_device, zs, width * height * sizeof(cuFloatComplex),
+             cudaMemcpyHostToDevice);
+
+  mandelbrot<<<grid, block>>>(
+      zs_device,
+      res_device,
+      width,
+      height,
+      maxiterations
+  );
   cudaDeviceSynchronize();
 
   cudaMemcpy(res, res_device, resmemsize, cudaMemcpyDeviceToHost);

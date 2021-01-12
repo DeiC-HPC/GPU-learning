@@ -11,32 +11,36 @@ from pycuda.compiler import SourceModule
 
 # ANCHOR: mandelbrot
 mod = SourceModule("""
-        #include "cuComplex.h"
+#include "cuComplex.h"
 
-        __global__ void mandelbrot(
-            const cuFloatComplex *zs,
-            int *res,
-            ushort width,
-            ushort height,
-            ushort max_iterations)
-        {
-            int x = blockIdx.x*blockDim.x+threadIdx.x;
-            int y = blockIdx.y*blockDim.y+threadIdx.y;
+__global__ void mandelbrot(
+    const cuFloatComplex *zs,
+    int *res,
+    ushort width,
+    ushort height,
+    ushort max_iterations) {
+  int x = blockIdx.x * blockDim.x + threadIdx.x;
+  int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-            if (x < width && y < height) {
-                cuFloatComplex z = zs[y*width+x];
-                cuFloatComplex c = z;
+  if (x >= width || y >= height) {
+    return;
+  }
 
-                for (int i = 0; i < max_iterations; i++) {
-                    if (z.x*z.x + z.y*z.y <= 4.0f) {
-                        res[y*width+x] = i+1;
-                        z = cuCmulf(z, z);
-                        z = cuCaddf(z, c);
-                    }
-                }
-            }
-        }
-        """)
+  cuFloatComplex z = zs[y * width + x];
+  cuFloatComplex c = z;
+
+  int i;
+  for (i = 0; i < max_iterations; i++) {
+    if (z.x * z.x + z.y * z.y <= 4.0f) {
+      z = cuCmulf(z, z);
+      z = cuCaddf(z, c);
+    } else {
+      break;
+    }
+  }
+  res[y * width + x] = i;
+}
+""")
 # ANCHOR_END: mandelbrot
 
 width = 1000
@@ -73,7 +77,8 @@ mandelbrot(
         np.uint16(height),
         np.uint16(max_iterations),
         block=block_size,
-        grid=grid_size)
+        grid=grid_size,
+)
 
 total_time = time.time() - start_time
 print("Elapsed time:", total_time)

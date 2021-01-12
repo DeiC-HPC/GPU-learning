@@ -13,36 +13,37 @@ queue = cl.CommandQueue(ctx)
 
 # ANCHOR: mandelbrot
 prg = cl.Program(ctx, """
-        float2 complex_product(float2 a, float2 b) {
-            float2 res;
-            res.x = a.x*b.x - a.y*b.y;
-            res.y = a.x*b.y + b.x*a.y;
-            return res;
-        }
+float2 complex_product(float2 a, float2 b) {
+  float2 res;
+  res.x = a.x*b.x - a.y*b.y;
+  res.y = a.x*b.y + b.x*a.y;
+  return res;
+}
 
-        __kernel void mandelbrot(
-            __global const float2 *zs,
-            __global int *res,
-            ushort width,
-            ushort max_iterations)
-        {
-            int x = get_global_id(0);
-            int y = get_global_id(1);
+__kernel void mandelbrot(
+    __global const float2 *zs,
+    __global int *res,
+    ushort width,
+    ushort max_iterations) {
+  int x = get_global_id(0);
+  int y = get_global_id(1);
 
-            float2 z = zs[y*width+x];
-            float2 c = z;
+  float2 z = zs[y * width + x];
+  float2 c = z;
 
-            res[y*width+x] = 0;
-            for (int i = 0; i < max_iterations; i++) {
-                if (z.x*z.x + z.y*z.y <= 4.0f) {
-                    res[y*width+x] = i+1;
-                    z = complex_product(z,z);
-                    z.x = z.x + c.x;
-                    z.y = z.y + c.y;
-                }
-            }
-        }
-        """).build()
+  int i;
+  for (i = 0; i < max_iterations; i++) {
+    if (z.x * z.x + z.y * z.y <= 4.0f) {
+      z = complex_product(z,z);
+      z.x = z.x + c.x;
+      z.y = z.y + c.y;
+    } else {
+      break;
+    }
+  }
+  res[y * width + x] = i;
+}
+""").build()
 # ANCHOR_END: mandelbrot
 
 width = 1000
@@ -79,7 +80,8 @@ prg.mandelbrot(
         zs_dev,
         res_dev,
         np.uint16(width),
-        np.uint16(max_iterations))
+        np.uint16(max_iterations),
+)
 
 # Copying result from GPU to memory
 cl.enqueue_copy(queue, res, res_dev).wait()

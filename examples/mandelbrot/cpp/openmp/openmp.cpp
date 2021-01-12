@@ -33,9 +33,10 @@ int main() {
   int *res = new int[width * height];
 
   timer time;
-  /* ANCHOR: loops */
-  #pragma omp target teams distribute parallel for collapse(2) \
-      map(from: res[:width * height])
+/* ANCHOR: loops */
+#pragma omp target teams distribute parallel for collapse(2)                   \
+    map(from                                                                   \
+        : res[:width * height])
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] =

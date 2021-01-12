@@ -7,11 +7,12 @@ improve performance.
 
 0 In general
 ------------
-Shared memory is a small portion of memory connected to each thread block, which
-is controllable by the user. It is used to lessen the amount of reads and writes
-to global memory as the latency is around 100 times lower. Also in cases where
-you have many local variables, it can also be an advantage to use shared memory
-as they could be pushed to global memory.
+Shared memory is a small portion, typically in the order of tens of kilobytes,
+of memory connected to each thread block, which is controllable by the user.
+It is used to lessen the amount of reads and writes to global memory as the
+latency is around 100 times lower. Also in cases where you have many local
+variables, it can also be an advantage to use shared memory as they could be
+pushed to global memory.
 
 {:.code-info pycuda .cuda}
 To use shared memory, you have to mark your variable with `__shared__`, like so
@@ -27,37 +28,36 @@ To use shared memory, you have to mark your variable with `__local`, like so
 they can not be allocated with a dynamic size. This means that the size can not
 come from a variable and must be written in as a part of the kernel code.
 
-1 Matrix transposition
-----------------------
-In this section we will be looking at matrix transposition. It is a problem
-where we will get problems with memory coalescing without using shared memory.
-Our first implementation will just be the naïve one, where we will transpose
-directly.
+1 Gaussian blur
+---------------
+In this section we will be looking at gaussian blur. It is a problem where all
+elements are accessed many times in memory. Our first will just be the naïve one,
+where we do not use shared memory.
 
+{:.code cuda}
 ```c++
-__global__ void matrixtranspose(
-    const int *A,
-    int *trA,
-    ushort colsA,
-    ushort rowsA)
-{
-    int i = blockIdx.x*T + threadIdx.x;
-    int j = blockIdx.y*T + threadIdx.y;
-    if( j < colsA && i < rowsA ) {
-        trA[j * rowsA + i] = A[i * colsA + j];
-    }
-}
+{{#include ../../examples/blur/cpp/cuda/naive.cu:gaussianblur}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/cpp/cuda/naive.ipynb)
+
+{:.code pycuda}
+```c++
+TODO: Make code
+```
+{:.code pyopencl}
+```c++
+TODO: Make code
 ```
 
-As we can see, we will not get a coalesced memory access when writing to global
-memory.
+Here we can see that every thread accesses many elements around itself depending
+on `FILTER_SIZE`, which is `21` in our example.
 
 2 Shared Memory implementation
 ------------------------------
-To get coalesced memory access, we will use shared memory. We will use the
+To reduce accesses to global memory, we will use shared memory. We will use the
 shared memory to save the part of global memory, which is read by the thread
-block. We can then use this saved to write to the correct place in another
-thread to get coalesced access.
+block.
 
 {:.code-info pycuda cuda}
 Before we go on, we have to introduce barriers. Barriers are a way to ensure
@@ -81,47 +81,30 @@ important to note, that all code must pass the same barrier at the same time.
 Using barriers in a different way will result in undefined behaviour.
 
 ![One thread is yet to reach the barrier, so the two others are waiting](barrier.png)
-![All threads have reached the barrier, so they now can continue](barrier.png)
-
-{:.code-info cuda pycuda}
-To get coalesced access with share memory, we need to use the `blockIdx` to move
-our thread blocks. By swapping `blockIdx.x` and `blockIdx.y`, when we calculate
-our position, we can simply transpose within the block in shared memory and
-write that result to global memory.
+![All threads have reached the barrier, so they now can continue](barrierdone.png)
 
 {:.code-info pyopencl}
-Two additional things we need are `get_local_id` and `get_group_id`. These two
+Two additional functions we need are `get_local_id` and `get_group_id`. These two
 functions works like `get_global_id`. `get_local_id` gets the current index in
 the thread block, we are working in, and `get_group_id` gets the index of the
 thread block. We need these to take advantage shared memory, because the entire
 thread block needs to swap group id dimension 0 and 1, and then we can transpose
 inside the thread block.
 
-![Swapping two thread blocks in a small grid](threadblocks.png)
-
+{:.code cuda}
 ```c++
-#define T 16
-__global__ void matrixtranspose(
-    const int *A,
-    int *trA,
-    ushort colsA,
-    ushort rowsA)
-{
-    __shared__ int tile[T][T+1];
-    int tidx = threadIdx.x;
-    int tidy = threadIdx.y;
-    int i = blockIdx.x*T + tidx;
-    int j = blockIdx.y*T + tidy;
-    if(j < colsA && i < rowsA) {
-        tile[tidy][tidx] = A[i * colsA + j];
-    }
-    __syncthreads();
-    i = blockIdx.y*T + threadIdx.x;
-    j = blockIdx.x*T + threadIdx.y;
-    if(j < colsA && i < rowsA) {
-        trA[i * rowsA + j] = tile[tidx][tidy];
-    }
-}
+{{#include ../../examples/blur/cpp/cuda/shared_memory.cu:gaussianblur}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/cpp/cuda/shared_memory.ipynb)
+
+{:.code pycuda}
+```c++
+TODO: Make code
+```
+{:.code pyopencl}
+```c++
+TODO: Make code
 ```
 
 3 Dynamically allocated shared memory implementation
@@ -131,8 +114,8 @@ This feature does not exist in OpenCL
 
 In this implementation we will use dynamically allocated shared memory instead
 of allocating it directly in the kernel. It does not yield any specific
-performance benefit to dynamically allocate shared memory. But it will make the
-kernel more general and you will need less code to handle changing block sizes.
+performance benefit to dynamically allocate shared memory. But it will make it
+possible to use it for multiple purposes or with changing block sizes.
 
 {:.code-info cuda}
 We will also need to change the way we call our kernel by adding a third
@@ -141,37 +124,25 @@ call.
 
 {:.code cuda}
 ```c++
-matrixtranspose<<<grid, block, T*T*sizeof(int)>>>
+{{#include ../../examples/blur/cpp/cuda/dynamic_shared_memory.cu:call}}
 ```
 
 {:.code-info pycuda}
 We will also need to change the way we call our kernel by adding the argument
 `shared`, defining the number of bytes needed, to the function call.
 
-{:.code pycuda}
-```python
-```
-
+{:.code cuda}
 ```c++
-__global__ void matrixtranspose(
-    const int *A,
-    int *trA,
-    ushort colsA,
-    ushort rowsA)
-{
-    extern __shared__ int tile[];
-    int sharedIdx = threadIdx.y*blockDim.y + threadIdx.x;
-    int i = blockIdx.x*blockDim.x + threadIdx.x;
-    int j = blockIdx.y*blockDim.y + threadIdx.y;
-    if( j < colsA && i < rowsA ) {
-        tile[sharedIdx] = A[i * colsA + j];
-    }
-    __syncthreads();
-    i = blockIdx.y*blockDim.y + threadIdx.x;
-    j = blockIdx.x*blockDim.x + threadIdx.y;
-    if(j < colsA && i < rowsA) {
-        sharedIdx = threadIdx.x*blockDim.x + threadIdx.y;
-        trA[i * rowsA + j] = tile[sharedIdx];
-    }
-}
+{{#include ../../examples/blur/cpp/cuda/dynamic_shared_memory.cu:gaussianblur}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/cpp/cuda/dynamic_shared_memory.ipynb)
+
+{:.code pycuda}
+```c++
+TODO: Make code
+```
+{:.code pyopencl}
+```c++
+TODO: Make code
 ```

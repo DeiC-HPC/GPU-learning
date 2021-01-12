@@ -11,12 +11,12 @@ int main() {
   timer time;
 
   /* ANCHOR: mapreduce */
-  #pragma acc parallel loop copy(elements[:num])
+  #pragma acc parallel loop copyout(elements[:num])
   for (int i = 0; i < num; i++) {
     elements[i] = i;
   }
 
-  #pragma acc parallel loop reduction(+: res) copy(elements[:num])
+  #pragma acc parallel loop reduction(+: res) copyin(elements[:num])
   for (int i = 0; i < num; i++) {
     res += elements[i];
   }

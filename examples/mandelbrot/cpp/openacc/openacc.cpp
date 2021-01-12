@@ -47,7 +47,7 @@ int main() {
   timer time;
 
 /* ANCHOR: loops */
-#pragma acc parallel loop collapse(2) copyout(res[:width * height])
+#pragma acc parallel loop collapse(2) copyin(zs[:width * height]) copyout(res[:width * height])
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] = mandelbrot(zs[i * width + j], maxiterations);

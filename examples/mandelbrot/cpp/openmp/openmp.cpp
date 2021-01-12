@@ -48,7 +48,7 @@ int main() {
   timer time;
 
 /* ANCHOR: loops */
-#pragma omp target teams distribute parallel for collapse(2) map(from: res[:width * height])
+#pragma omp target teams distribute parallel for collapse(2) map(to: zs[:width * height]) map(from: res[:width * height])
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] = mandelbrot(zs[i * width + j], maxiterations);

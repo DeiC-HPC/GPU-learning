@@ -61,9 +61,9 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
     float blue = 0.0;
     for (int dy = -FILTER_SIZE / 2; dy <= FILTER_SIZE / 2; dy++) {
       for (int dx = -FILTER_SIZE / 2; dx <= FILTER_SIZE / 2; dx++) {
-	float filter_value = filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2];
-	int sx = threadIdx.x + dx + FILTER_SIZE / 2;
-	int sy = threadIdx.y + dy + FILTER_SIZE / 2;
+        float filter_value = filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2];
+        int sx = threadIdx.x + dx + FILTER_SIZE / 2;
+        int sy = threadIdx.y + dy + FILTER_SIZE / 2;
         red += filter_value * shared_pixels[sy][sx].red;
         green += filter_value * shared_pixels[sy][sx].green;
         blue += filter_value * shared_pixels[sy][sx].blue;

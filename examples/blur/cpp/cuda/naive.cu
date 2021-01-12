@@ -41,7 +41,7 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
     float blue = 0.0;
     for (int dy = -FILTER_SIZE / 2; dy <= FILTER_SIZE / 2; dy++) {
       for (int dx = -FILTER_SIZE / 2; dx <= FILTER_SIZE / 2; dx++) {
-	float filter_value = filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2];
+        float filter_value = filter[dy + FILTER_SIZE / 2][dx + FILTER_SIZE / 2];
         int ny = y + dy;
         int nx = x + dx;
         if (0 <= ny && ny < height && 0 <= nx && nx < width) {

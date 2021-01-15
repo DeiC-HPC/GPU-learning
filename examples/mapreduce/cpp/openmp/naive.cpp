@@ -1,6 +1,5 @@
 #include <iostream>
-#include <stdlib.h>
-#include <time.h>
+#include <timer.h>
 
 using namespace std;
 
@@ -8,9 +7,8 @@ int main() {
   int num = 100000000;
   int *elements = new int[num];
   long res = 0;
-  clock_t start, end;
 
-  start = clock();
+  timer time;
 
   /* ANCHOR: mapreduce */
   #pragma omp target teams distribute parallel for map(from: elements[:num])
@@ -24,9 +22,7 @@ int main() {
   }
   /* ANCHOR_END: mapreduce */
 
-  end = clock();
+  cout << "Elapsed time: " << time.getTime() << endl;
 
-  cout << "Elapsed time: " << (double)(end - start) / CLOCKS_PER_SEC << endl;
-
-  cout << res << endl;
+  cout << "The result is: " << res << endl;
 }

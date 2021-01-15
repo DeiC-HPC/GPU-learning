@@ -6,11 +6,11 @@ using namespace std;
 __global__ void matrixaddition(const int *a, const int *b, int *res,
                                ushort width, ushort height) {
   /* ANCHOR: matrixaddition */
-  int i = blockIdx.x * blockDim.x + threadIdx.x;
+  int j = blockIdx.x * blockDim.x + threadIdx.x;
 
-  if (i < width) {
-    for (int j = 0; j < height; j++) {
-      res[j * width + i] = a[j * width + i] + b[j * width + i];
+  if (j < width) {
+    for (int i = 0; i < height; i++) {
+      res[i * width + j] = a[i * width + j] + b[i * width + j];
     }
   }
   /* ANCHOR_END: matrixaddition */

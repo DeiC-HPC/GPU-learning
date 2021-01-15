@@ -13,14 +13,14 @@ int main() {
   start = clock();
 
   /* ANCHOR: mapreduce */
-  #pragma omp target data map(alloc: elements[:num]) map(from: res)
+  #pragma omp target data map(alloc: elements[:num])
   {
     #pragma omp target teams distribute parallel for
     for (int i = 0; i < num; i++) {
       elements[i] = i;
     }
 
-    #pragma omp target teams distribute parallel for reduction(+: res)
+    #pragma omp target teams distribute parallel for reduction(+: res) map(from: res)
     for (int i = 0; i < num; i++) {
       res += elements[i];
     }

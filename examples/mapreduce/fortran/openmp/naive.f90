@@ -13,7 +13,7 @@ PROGRAM mapreduce
         elements(i) = i
     enddo
 
-    !$omp target teams distribute parallel do map(from:elements) reduction(+:res)
+    !$omp target teams distribute parallel do reduction(+: res) map(to: elements) map(from: res)
     do i=1,num
         res = res + elements(i)
     enddo

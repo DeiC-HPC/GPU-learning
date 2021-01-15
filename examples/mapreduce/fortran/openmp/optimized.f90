@@ -8,13 +8,13 @@ PROGRAM mapreduceoptimized
 
     call cpu_time(start_time)
     ! ANCHOR: mapreduce
-    !$omp target data map(alloc: elements) map(from: res)
+    !$omp target data map(alloc: elements)
     !$omp target teams distribute parallel do
     do i=1,num
         elements(i) = i
     enddo
 
-    !$omp target teams distribute parallel do reduction(+: res)
+    !$omp target teams distribute parallel do reduction(+: res) map(from: res)
     do i=1,num
         res = res + elements(i)
     enddo

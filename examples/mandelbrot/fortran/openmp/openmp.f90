@@ -5,7 +5,7 @@ function mandelbrot(z, maxiterations) result(iterations)
     !$omp declare target
 
     c = z
-    do iterations = 1, maxiterations
+    do iterations = 0, maxiterations-1
         if (abs(z) > 2) then
             return
         endif

@@ -43,8 +43,11 @@ where we do not use shared memory.
 
 {:.code pycuda}
 ```c++
-TODO: Make code
+{{#include ../../examples/blur/python/cuda/naive.py:gaussianblur}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/python/cuda/naive.ipynb)
+
 {:.code pyopencl}
 ```c++
 TODO: Make code
@@ -100,8 +103,11 @@ inside the thread block.
 
 {:.code pycuda}
 ```c++
-TODO: Make code
+{{#include ../../examples/blur/python/cuda/shared_memory.py:gaussianblur}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/python/cuda/shared_memory.ipynb)
+
 {:.code pyopencl}
 ```c++
 TODO: Make code
@@ -131,6 +137,11 @@ call.
 We will also need to change the way we call our kernel by adding the argument
 `shared`, defining the number of bytes needed, to the function call.
 
+{:.code pycuda}
+```python
+{{#include ../../examples/blur/python/cuda/dynamic_shared_memory.py:call}}
+```
+
 {:.code cuda}
 ```c++
 {{#include ../../examples/blur/cpp/cuda/dynamic_shared_memory.cu:gaussianblur}}
@@ -140,8 +151,11 @@ We will also need to change the way we call our kernel by adding the argument
 
 {:.code pycuda}
 ```c++
-TODO: Make code
+{{#include ../../examples/blur/python/cuda/dynamic_shared_memory.py:gaussianblur}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/python/cuda/dynamic_shared_memory.ipynb)
+
 {:.code pyopencl}
 ```c++
 TODO: Make code

@@ -82,7 +82,6 @@ res = np.empty(height*width*3).astype(np.float32)
 
 block_size = (dim_size,dim_size,1)
 
-# Assuming width == height
 dimx = int(math.ceil(width / float(dim_size)))
 dimy = int(math.ceil(height / float(dim_size)))
 grid_size = (dimx, dimy, 1)

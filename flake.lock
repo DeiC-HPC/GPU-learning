@@ -1,0 +1,61 @@
+{
+  "nodes": {
+    "hpc-nix": {
+      "inputs": {
+        "jupyterWith": "jupyterWith",
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "narHash": "sha256-9CtYoRjTM03fYzT/arDPX5eDDdYC1PBoxkOA/hQaEXU=",
+        "path": "/home/tethys/git/hpc-nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "/home/tethys/git/hpc-nix",
+        "type": "path"
+      }
+    },
+    "jupyterWith": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1603365529,
+        "narHash": "sha256-s/G12sE6euRAHLA1tn0yIicE6P+PMChJa1q2cPievxo=",
+        "owner": "TethysSvensson",
+        "repo": "jupyterWith",
+        "rev": "daad81179fc8b58ea7f4ab036ba0a4db0fdfdf57",
+        "type": "github"
+      },
+      "original": {
+        "owner": "TethysSvensson",
+        "repo": "jupyterWith",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1611575689,
+        "narHash": "sha256-z2rNP3zdVnGxp9iV2Rbn0/LLKhk47DZQKxDkpYFLI7M=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "891f607d5301d6730cb1f9dcf3618bcb1ab7f10e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "hpc-nix": "hpc-nix",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

@@ -2,9 +2,26 @@
 
 set -e
 
-rm -rf notebooks
-cp -r examples notebooks
-for f in $(find notebooks -type f ); do
+SRC="$1"
+DST="$2"
+SOURCE_TO_NOTEBOOK="$3"
+
+if [ -z "$SRC" ]; then
+  SRC=examples
+fi
+
+if [ -z "$DST" ]; then
+  DST=notebooks
+fi
+
+if [ -z "$SOURCE_TO_NOTEBOOK" ]; then
+  (cd source-to-notebook && cargo build --release)
+  SOURCE_TO_NOTEBOOK=$PWD/source-to-notebook/target/release/source-to-notebook
+fi
+
+rm -rf $DST || true
+cp -r $SRC $DST
+for f in $(find $DST -type f ); do
   ext="${f##*.}"
   typ=""
   case $ext in
@@ -26,7 +43,7 @@ for f in $(find notebooks -type f ); do
     cu) typ=cuda;;
   esac
   if [[ -n "$typ" ]]; then
-    (cd source-to-notebook && cargo run --release $typ ../$f ../${f%%.*}.ipynb)
+    $SOURCE_TO_NOTEBOOK $typ $f ${f%%.*}.ipynb
     rm -f $f
   else
     echo UNKNOWN $f

@@ -20,7 +20,7 @@ pkgs.mkShell {
       (cd notebooks && exec ../result-jupyter/bin/jupyter-lab --no-browser --config=$JUPYTER_CONFIG </dev/null) &
       JUPYTER_PID=$!
       echo $MDBOOK_PID $JUPYTER_PID
-      nginx -c nginx/nginx.conf -p $PWD
+      nginx -c nginx/dev.conf -p $PWD
       exit 0
     '';
 }

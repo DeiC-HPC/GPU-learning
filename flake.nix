@@ -81,6 +81,7 @@
         docker-nginx = pkgs.dockerTools.buildImage {
           name = "GPU-learning";
           config.cmd = ["${docker-nginx-command}"];
+          extraCommands = "mkdir -m 0777 tmp";
         };
       };
     };

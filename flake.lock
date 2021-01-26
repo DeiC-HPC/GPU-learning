@@ -8,7 +8,7 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-9CtYoRjTM03fYzT/arDPX5eDDdYC1PBoxkOA/hQaEXU=",
+        "narHash": "sha256-oDn6fm+fCGh/VoCC9spkbainrwkt0PMDHP895c2QAVs=",
         "path": "/home/tethys/git/hpc-nix",
         "type": "path"
       },

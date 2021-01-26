@@ -71,7 +71,7 @@
 
           set -e
 
-          ${pkgs.shadow}/bin/su - user -c ${jupyter} &
+          ${pkgs.shadow.su}/bin/su - user -c ${jupyter} &
           JUPYTER_PID=$!
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT
           cd /tmp

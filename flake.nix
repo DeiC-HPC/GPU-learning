@@ -60,10 +60,11 @@
           TMPDIR=$(mktemp -d /tmp/jupyter-notebooks.XXXXXX)
           trap "rm -rf $TMPDIR" EXIT INT QUIT TERM
           cp -r ${notebooks} $TMPDIR/notebooks
+          chmod u+w -R $TMPDIR
           cd $TMPDIR/notebooks
 
           export JUPYTER_HEADER_FILES=${./include}
-          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} </dev/null) &
+          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} --ip=0.0.0.0 </dev/null
         '';
       };
     };

@@ -81,7 +81,7 @@
         docker-nginx = pkgs.dockerTools.buildImage {
           name = "GPU-learning";
           config = {
-            Env = [ "PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.curl}/bin" ];
+            Env = [ "PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.curl}/bin:${pkgs.vim}/bin" ];
             Cmd = ["${docker-nginx-command}"];
             User = "1000";
             Group = "100";

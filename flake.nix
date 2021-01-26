@@ -83,8 +83,8 @@
           config = {
             Env = [ "PATH=${pkgs.coreutils}/bin" ];
             Cmd = ["${docker-nginx-command}"];
-            User = 1000;
-            Group = 100;
+            User = "1000";
+            Group = "100";
           };
           extraCommands = ''
             mkdir -p -m 0777 tmp var/cache/nginx

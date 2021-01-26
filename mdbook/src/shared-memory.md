@@ -50,8 +50,9 @@ where we do not use shared memory.
 
 {:.code pyopencl}
 ```c++
-TODO: Make code
+{{#include ../../examples/blur/python/opencl/naive.py:gaussianblur}}
 ```
+[Run the code in Jupyter](/jupyter/lab/tree/blur/python/opencl/naive.ipynb)
 
 Here we can see that every thread accesses many elements around itself depending
 on `FILTER_SIZE`, which is `21` in our example.
@@ -87,12 +88,10 @@ Using barriers in a different way will result in undefined behaviour.
 ![All threads have reached the barrier, so they now can continue](barrierdone.png)
 
 {:.code-info pyopencl}
-Two additional functions we need are `get_local_id` and `get_group_id`. These two
-functions works like `get_global_id`. `get_local_id` gets the current index in
-the thread block, we are working in, and `get_group_id` gets the index of the
-thread block. We need these to take advantage shared memory, because the entire
-thread block needs to swap group id dimension 0 and 1, and then we can transpose
-inside the thread block.
+We also need an additional functions `get_local_id`. This functions works like
+`get_global_id`. `get_local_id` gets the current index in the thread block, we
+are working in. We need this to take advantage shared memory, because we need to
+know
 
 {:.code cuda}
 ```c++
@@ -110,13 +109,15 @@ inside the thread block.
 
 {:.code pyopencl}
 ```c++
-TODO: Make code
+{{#include ../../examples/blur/python/opencl/shared_memory.py:gaussianblur}}
 ```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/blur/python/opencl/shared_memory.ipynb)
 
 3 Dynamically allocated shared memory implementation
 ----------------------------------------------------
 {:.code-info pyopencl}
-This feature does not exist in OpenCL
+This feature does not exist in OpenCL.
 
 In this implementation we will use dynamically allocated shared memory instead
 of allocating it directly in the kernel. It does not yield any specific
@@ -155,8 +156,3 @@ We will also need to change the way we call our kernel by adding the argument
 ```
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/blur/python/cuda/dynamic_shared_memory.ipynb)
-
-{:.code pyopencl}
-```c++
-TODO: Make code
-```

@@ -30,9 +30,10 @@ __kernel void blur(__global FloatPixel *pixels_in, __global FloatPixel *pixels_o
 
   int loc_x = get_local_id(0);
   int loc_y = get_local_id(1);
-  
+
+  /* ANCHOR: gaussianblur */
   __local FloatPixel shared_pixels[T + FILTER_SIZE - 1][T + FILTER_SIZE - 1];
-  
+
   for (int dy = -FILTER_SIZE / 2; dy <= T + FILTER_SIZE / 2; dy += T) {
     for (int dx = -FILTER_SIZE / 2; dx <= T + FILTER_SIZE / 2; dx += T) {
       int nx = x + dx;
@@ -71,6 +72,7 @@ __kernel void blur(__global FloatPixel *pixels_in, __global FloatPixel *pixels_o
     pixels_out[y * width + x].green += green;
     pixels_out[y * width + x].blue += blue;
   }
+  /* ANCHOR_END: gaussianblur */
 }
 """ % (dim_size)).build()
 

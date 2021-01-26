@@ -25,6 +25,7 @@ __kernel void blur(__global const FloatPixel *pixels_in, __global FloatPixel *pi
   int x = get_global_id(0);
   int y = get_global_id(1);
 
+  /* ANCHOR: gaussianblur */
   float red = 0.0;
   float green = 0.0;
   float blue = 0.0;
@@ -43,6 +44,7 @@ __kernel void blur(__global const FloatPixel *pixels_in, __global FloatPixel *pi
   pixels_out[y * width + x].red = red;
   pixels_out[y * width + x].green += green;
   pixels_out[y * width + x].blue += blue;
+  /* ANCHOR_END: gaussianblur */
 }
 """).build()
 

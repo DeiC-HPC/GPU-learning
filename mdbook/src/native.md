@@ -94,9 +94,6 @@ cudaMemcpy(numbers, numbers_device, n*sizeof(float), cudaMemcpyDeviceToHost);
 
 ```
 
-
-**TODO**: write about running kernels and allocating memory
-
 {:.code-info cuda}
 It is also possible to use `cudaMallocManaged`, where copying will be done for
 you. This can lead to worse performance.
@@ -112,6 +109,7 @@ When calling our kernel we need to define the dimensions of our kernel and
 thread blocks. As said earlier the have up to 1024 threads and each dimension
 must be a power of 2. The grid is then defined as the number of thread blocks we
 want in each dimension.
+
 {:.code cuda}
 ```c++
 dim3 grid(n,m,1);
@@ -120,7 +118,7 @@ dim3 block(16,16,1);
 someKernel<<< grid, block >>>(readable, writable, 5.0f);
 ```
 
-{:code-info pyopencl pycuda}
+{:.code-info pyopencl pycuda}
 **TODO**: Write about lauching kernels in python
 
 2 Naïve implementation

@@ -64,7 +64,14 @@
           cd $TMPDIR/notebooks
 
           export JUPYTER_HEADER_FILES=${./include}
-          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} --ip=0.0.0.0 </dev/null
+          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} </dev/null
+        '';
+        nginx = pkgs.writeScript "nginx" ''
+          #!${pkgs.bash}/bin/bash
+
+          set -e
+          ${jupyter} &
+          ${pkgs.nginx}/bin/nginx -c ${docker-nginx-conf}/nginx.conf -p $PWD
         '';
       };
     };

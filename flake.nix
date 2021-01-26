@@ -71,6 +71,8 @@
 
           set -e
 
+          export PATH=${pkgs.coreutils}/bin
+
           ${jupyter} &
           JUPYTER_PID=$!
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT

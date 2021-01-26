@@ -82,7 +82,16 @@
             Env = [ "PATH=${pkgs.coreutils}/bin" ];
             Cmd = ["${docker-nginx-command}"];
           };
-          extraCommands = "mkdir -m 0777 tmp";
+          extraCommands = ''
+            mkdir -m 0777 tmp
+            mkdir -p etc bin usr/bin
+            ln -s ${pkgs.bash}/bin/sh bin
+            ln -s ${pkgs.coreutils}/bin/env usr/bin
+            echo 'root:x:0:0:root:/root:/bin/bash' > etc/passwd
+            echo 'nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin' >> etc/passwd
+            echo 'root:x:0:' > etc/group
+            echo 'nogroup:x:65534:' >> etc/group
+          '';
         };
       };
     };

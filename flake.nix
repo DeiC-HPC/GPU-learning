@@ -70,7 +70,10 @@
           #!${pkgs.bash}/bin/bash
 
           set -e
+
           ${jupyter} &
+          JUPYTER_PID=$!
+          trap 'kill $JUPYTER_PID' TERM EXIT QUIT
           ${pkgs.nginx}/bin/nginx -c ${docker-nginx-conf}/nginx.conf -p $PWD
         '';
       };

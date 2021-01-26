@@ -87,7 +87,7 @@
             Group = 100;
           };
           extraCommands = ''
-            mkdir -m 0777 tmp var/cache/nginx
+            mkdir -p -m 0777 tmp var/cache/nginx
             mkdir -p etc bin usr/bin
             ln -s ${pkgs.bash}/bin/sh bin
             ln -s ${pkgs.coreutils}/bin/env usr/bin

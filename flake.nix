@@ -71,8 +71,6 @@
 
           set -e
 
-          export PATH=${pkgs.coreutils}/bin
-
           ${jupyter} &
           JUPYTER_PID=$!
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT
@@ -80,7 +78,10 @@
         '';
         docker-nginx = pkgs.dockerTools.buildImage {
           name = "GPU-learning";
-          config.cmd = ["${docker-nginx-command}"];
+          config = {
+            Env = [ "PATH=${pkgs.coreutils}/bin" ];
+            Cmd = ["${docker-nginx-command}"];
+          };
           extraCommands = "mkdir -m 0777 tmp";
         };
       };

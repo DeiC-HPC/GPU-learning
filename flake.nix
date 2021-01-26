@@ -91,8 +91,8 @@
             mkdir -p etc bin usr/bin
             ln -s ${pkgs.bash}/bin/sh bin
             ln -s ${pkgs.coreutils}/bin/env usr/bin
-            echo 'root:x:0:0:root:/root:/bin/sh' > etc/passwd
-            echo 'user:x:1000:100::/:/bin/sh' >> etc/passwd
+            echo 'root:x:0:0:root:/tmp:/bin/sh' > etc/passwd
+            echo 'user:x:1000:100::/tmp:/bin/sh' >> etc/passwd
             echo 'nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin' >> etc/passwd
             echo 'root:x:0:' > etc/group
             echo 'users:x:100:' >> etc/group

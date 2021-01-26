@@ -71,7 +71,7 @@
 
           set -e
 
-          ${pkgs.shadow.su}/bin/su - user -c ${jupyter} &
+          ${jupyter} &
           JUPYTER_PID=$!
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT
           cd /tmp
@@ -83,10 +83,12 @@
           config = {
             Env = [ "PATH=${pkgs.coreutils}/bin" ];
             Cmd = ["${docker-nginx-command}"];
+            User = 1000;
+            Group = 100;
           };
           extraCommands = ''
-            mkdir -m 0777 tmp
-            mkdir -p etc bin usr/bin var/cache/nginx
+            mkdir -m 0777 tmp var/cache/nginx
+            mkdir -p etc bin usr/bin
             ln -s ${pkgs.bash}/bin/sh bin
             ln -s ${pkgs.coreutils}/bin/env usr/bin
             echo 'root:x:0:0:root:/root:/bin/sh' > etc/passwd

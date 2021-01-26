@@ -66,7 +66,7 @@
           export JUPYTER_HEADER_FILES=${./include}
           ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} </dev/null
         '';
-        nginx = pkgs.writeScript "nginx" ''
+        docker-nginx-command = pkgs.writeScript "nginx" ''
           #!${pkgs.bash}/bin/bash
 
           set -e
@@ -76,6 +76,10 @@
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT
           ${pkgs.nginx}/bin/nginx -c ${docker-nginx-conf}/nginx.conf -p $PWD
         '';
+        docker-nginx = pkgs.dockerTools.buildImage {
+          name = "GPU-learning";
+          config.cmd = ["${docker-nginx-command}"];
+        };
       };
     };
 }

@@ -66,14 +66,16 @@
           export JUPYTER_HEADER_FILES=${./include}
           ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} </dev/null
         '';
-        docker-nginx-command = pkgs.writeScript "nginx" ''
+        docker-nginx-command = pkgs.writeScript "docker-nginx-command" ''
           #!${pkgs.bash}/bin/bash
 
           set -e
 
-          ${jupyter} &
+          ${pkgs.shadow}/bin/su - user -c ${jupyter} &
           JUPYTER_PID=$!
           trap 'kill $JUPYTER_PID' TERM EXIT QUIT
+          cd /tmp
+          mkdir logs
           ${pkgs.nginx}/bin/nginx -c ${docker-nginx-conf}/nginx.conf -p $PWD
         '';
         docker-nginx = pkgs.dockerTools.buildImage {
@@ -84,12 +86,14 @@
           };
           extraCommands = ''
             mkdir -m 0777 tmp
-            mkdir -p etc bin usr/bin
+            mkdir -p etc bin usr/bin var/cache/nginx
             ln -s ${pkgs.bash}/bin/sh bin
             ln -s ${pkgs.coreutils}/bin/env usr/bin
-            echo 'root:x:0:0:root:/root:/bin/bash' > etc/passwd
+            echo 'root:x:0:0:root:/root:/bin/sh' > etc/passwd
+            echo 'user:x:1000:100::/:/bin/sh' >> etc/passwd
             echo 'nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin' >> etc/passwd
             echo 'root:x:0:' > etc/group
+            echo 'users:x:100:' >> etc/group
             echo 'nogroup:x:65534:' >> etc/group
           '';
         };

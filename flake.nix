@@ -64,7 +64,7 @@
           cd $TMPDIR/notebooks
 
           export JUPYTER_HEADER_FILES=${./include}
-          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} </dev/null
+          ${hpc-nix.packages."${system}".jupyter}/bin/jupyter-lab --no-browser --config=${./jupyter-config.py} --ip=0.0.0.0 </dev/null
         '';
         docker-nginx-command = pkgs.writeScript "docker-nginx-command" ''
           #!${pkgs.bash}/bin/bash
@@ -81,7 +81,7 @@
         docker-nginx = pkgs.dockerTools.buildImage {
           name = "GPU-learning";
           config = {
-            Env = [ "PATH=${pkgs.coreutils}/bin" ];
+            Env = [ "PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.curl}/bin" ];
             Cmd = ["${docker-nginx-command}"];
             User = "1000";
             Group = "100";

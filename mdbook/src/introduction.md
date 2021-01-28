@@ -3,7 +3,11 @@ This book contains material for learning GPU programming in various programming
 environments. It is meant for people who are confident in solving their own
 problems on a CPU but needs more computing capabilities.
 
-__TODO__: GPUer er forskellige og kan ikke det samme
+It is important to note before we start that not all GPUs are equal. So you will
+not necessarily see the same performance benefits by implementing your code on
+different GPUs. Newer GPUs are also more capable and include many functionalities
+that is not available on older devices, for example tensor cores for machine
+learning purposes.
 
 Introduction
 ------------
@@ -45,9 +49,7 @@ GPU.
 Compilers used
 --------------
 Also it is worth noting that the examples in this book are using the following
-compilers
-
-__TODO__: Fix these compilers
+compilers:
 
 - Cuda, NVCC 11
 - OpenMP and OpenACC, GCC 10.2.0 with NVPTX offloading.

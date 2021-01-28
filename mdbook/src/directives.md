@@ -99,8 +99,8 @@ should be compiled for our offload target.
 
 
 {:.code-info f90-openacc}
-Around the mandelbrot function there has been added `$!acc routine`. This means
-that it should be compiled for our offload target.
+Inside the mandelbrot function `$!acc routine` has been added. This means that it
+should be compiled for our offload target.
 
 {:.code f90-openacc}
 ```f90
@@ -109,8 +109,16 @@ that it should be compiled for our offload target.
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/openacc/openacc.ipynb)
 
+{:.code cpp-openmp}
+```c++
+{{#include ../../examples/mandelbrot/cpp/openmp/openmp.cpp:loops}}
+```
+{:.code-link}
+[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/openmp/openmp.ipynb)
+
+{:.code-info cpp-openacc}
 Before the loop we have a pragma
-`$!acc parallel loop collapse(2) copyout(res)`
+`#pragma acc parallel loop collapse(2) copyin(zs[:width * height]) copyout(res[:width * height])`
 which is where we tell the compiler what we want to happen.
 `parallel loop` tells the compiler that the loop is completely parallel and that
 every part can be run by itself. The `collapse(2)` tells the compiler that it can
@@ -123,14 +131,6 @@ allocating the variable on the GPU. `present` tells the compiler that it is
 already there. There is also `deviceptr` which says that the variable is already
 on the GPU and it is containing a pointer to the device memory. This is only
 useful when using OpenACC together with another programming model.
-
-{:.code cpp-openmp}
-```c++
-{{#include ../../examples/mandelbrot/cpp/openmp/openmp.cpp:loops}}
-```
-{:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/openmp/openmp.ipynb)
-
 
 {:.code cpp-openacc}
 ```c++
@@ -147,6 +147,20 @@ useful when using OpenACC together with another programming model.
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/openmp/openmp.ipynb)
 
+{:.code-info f90-openacc}
+Before the loop we have a pragma `$!acc parallel loop collapse(2) copyout(res)`
+which is where we tell the compiler what we want to happen.
+`parallel loop` tells the compiler that the loop is completely parallel and that
+every part can be run by itself. The `collapse(2)` tells the compiler that it can
+parallelize both loops. At last we have `copyout(res)`, which is a
+data clause. Here we say that we want to copy the variable `res` back from the
+GPU.  There are also other data clauses besides `copyout`. `copyin` is for
+copying data to the GPU. `copy` is for copying data to and from the GPU, so data
+is copied to the GPU first and then back when it is done. `create` is for
+allocating the variable on the GPU. `present` tells the compiler that it is
+already there. There is also `deviceptr` which says that the variable is already
+on the GPU and it is containing a pointer to the device memory. This is only
+useful when using OpenACC together with another programming model.
 
 {:.code f90-openacc}
 ```c++

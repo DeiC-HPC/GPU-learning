@@ -11,10 +11,8 @@ This part of the book is not relevant for you chosen environment. Please go
 **TODO**: Some intro text
 
 {:.code-info pycuda pyopencl}
-**TODO**: Some text about importing modules
-
-{:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/cuda/naive.ipynb)
+Before we can start writing code for the GPU, we need to import some support
+libraries.
 
 {:.code pycuda}
 ```python
@@ -135,7 +133,13 @@ long, ulong, longlong, ulonglong, float, and double. The length of the vector
 types can be 2, 3, and 4.
 
 {:code-info pyopencl}
-**TODO**: write about code transformation in PyOpenCL
+In this version we have taken the naïve approach and done a direct translation
+of the program. In OpenCL there is no library for complex numbers so we will have
+to make the calculations ourselves. We will be using `float2` as the type, which
+is a 2D floating point vector. OpenCL has multple types, which support vector
+types. Those are char, uchar, short, ushort, int, uint,
+long, ulong, longlong, ulonglong, float, and double. The length of the vector
+types can be 2, 3, 4, 8, and 16.
 
 The only translation we have done in this version is the `mandelbrot`
 function and the complex arithmetic, which means all data is still generated and

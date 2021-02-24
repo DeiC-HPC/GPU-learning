@@ -75,7 +75,7 @@ int main() {
   dim3 block(T, T, 1), grid(dimx, dimy, 1);
 
   timer time;
-  hipLaunchKernelGGL(blur, dim3(grid), dim3(block), 0, 0, device_pixels_in, device_pixels_out, im.width,
+  hipLaunchKernelGGL(blur, grid, block, 0, 0, device_pixels_in, device_pixels_out, im.width,
                         im.height);
   hipDeviceSynchronize();
   cout << "Elapsed time: " << time.getTime() << endl;

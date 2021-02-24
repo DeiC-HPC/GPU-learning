@@ -60,7 +60,7 @@ int main() {
   int dimy = ceil(((float)height) / T);
   dim3 block(T, T, 1), grid(dimx, dimy, 1);
 
-  hipLaunchKernelGGL(mandelbrot, dim3(grid), dim3(block), 0, 0, 
+  hipLaunchKernelGGL(mandelbrot, grid, block, 0, 0,
       res_device,
       width,
       height,

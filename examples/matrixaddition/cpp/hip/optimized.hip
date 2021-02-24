@@ -38,7 +38,7 @@ int main() {
   }
 
   timer time;
-  hipLaunchKernelGGL(matrixaddition, dim3(grid), dim3(block), 0, 0, a, b, res, width, height);
+  hipLaunchKernelGGL(matrixaddition, grid, block, 0, 0, a, b, res, width, height);
   hipDeviceSynchronize();
   cout << "Elapsed time: " << time.getTime() << endl;
 

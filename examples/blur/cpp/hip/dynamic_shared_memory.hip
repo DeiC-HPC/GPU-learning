@@ -77,7 +77,7 @@ int main() {
 
   timer time;
   /* ANCHOR: call */
-  hipLaunchKernelGGL(blur, dim3(grid), dim3(block), SHARED_SIZE*SHARED_SIZE*sizeof(FloatPixel), 0, device_pixels_in, device_pixels_out, im.width,
+  hipLaunchKernelGGL(blur, grid, block, SHARED_SIZE*SHARED_SIZE*sizeof(FloatPixel), 0, device_pixels_in, device_pixels_out, im.width,
                         im.height);
   /* ANCHOR_END: call */
   hipDeviceSynchronize();

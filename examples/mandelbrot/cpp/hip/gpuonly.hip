@@ -17,9 +17,9 @@ __global__ void mandelbrot(
     float xdelta,
     float ymin,
     float ydelta,
-    ushort max_iterations) {
-  int x = blockIdx.x * blockDim.x + threadIdx.x;
-  int y = blockIdx.y * blockDim.y + threadIdx.y;
+    int max_iterations) {
+  size_t x = blockIdx.x * blockDim.x + threadIdx.x;
+  size_t y = blockIdx.y * blockDim.y + threadIdx.y;
 
   if (x >= width || y >= height) {
     return;
@@ -42,8 +42,8 @@ __global__ void mandelbrot(
 /* ANCHOR_END: mandelbrot */
 
 int main() {
-  int width = 1000;
-  int height = 1000;
+  int width = 100000;
+  int height = 100000;
   int maxiterations = 100;
   float ymin = -2.0;
   float ymax = 2.0;

@@ -20,15 +20,16 @@ float2 complex_product(float2 a, float2 b) {
 }
 
 __kernel void mandelbrot(
-    __global int *res,
+    __global uchar *res,
     ushort width,
     float xmin,
     float xdelta,
     float ymin,
     float ydelta,
-    ushort max_iterations) {
-  int x = get_global_id(0);
-  int y = get_global_id(1);
+    uint max_iterations) {
+  size_t x = get_global_id(0);
+  size_t y = get_global_id(1);
+  size_t w = width;
 
   float2 z = (float2)(xmin + x*xdelta, ymin + y*ydelta);
   float2 c = z;
@@ -43,13 +44,13 @@ __kernel void mandelbrot(
       break;
     }
   }
-  res[y * width + x] = i;
+  res[y * w + x] = i;
 }
 """).build()
 # ANCHOR_END: mandelbrot
 
-width = 1000
-height = 1000
+width = 80000
+height = 80000
 max_iterations = 100
 xmin = -2.5
 xmax = 1.5
@@ -58,7 +59,7 @@ ymax = 2.0
 
 start_time = time.time()
 
-res = np.empty(width*height).astype(np.int32)
+res = np.empty(width*height).astype(np.uint8)
 
 # Flags for memory on GPU
 mf = cl.mem_flags
@@ -77,7 +78,7 @@ prg.mandelbrot(
         np.float32((xmax-xmin) / (width-1.0)),
         np.float32(ymin),
         np.float32((ymax-ymin) / (height-1.0)),
-        np.uint16(max_iterations),
+        np.uint32(max_iterations),
 )
 
 # Copying result from GPU to memory
@@ -86,14 +87,4 @@ cl.enqueue_copy(queue, res, res_dev).wait()
 total_time = time.time() - start_time
 print("Elapsed time:", total_time)
 
-# Setting shape of array to help displaying it
-res.shape = (width, height)
-
-# Displaying the Mandelbrot set
-fig, ax = plt.subplots()
-
-ax.imshow(res, interpolation='bicubic', cmap=plt.get_cmap("terrain"))
-plt.axis("off")
-plt.tight_layout()
-
-plt.show()
+del res

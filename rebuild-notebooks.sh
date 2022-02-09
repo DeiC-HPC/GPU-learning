@@ -41,6 +41,7 @@ for f in $(find $DST -type f ); do
       fi
     ;;
     cu) typ=cuda;;
+    hip) typ=hip;;
   esac
   if [[ -n "$typ" ]]; then
     $SOURCE_TO_NOTEBOOK $typ $f ${f%%.*}.ipynb

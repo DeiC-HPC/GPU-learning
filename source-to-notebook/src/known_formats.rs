@@ -9,6 +9,7 @@ pub enum Format {
     Cuda,
     FortranOpenAcc,
     FortranOpenMp,
+    Hip,
     Python,
 }
 
@@ -19,6 +20,7 @@ impl Format {
             "cpp_openmp",
             "fortran_openacc",
             "fortran_openmp",
+            "hip",
             "cuda",
             "python",
         ]
@@ -30,6 +32,7 @@ impl Format {
             "fortran_openacc" => Ok(Format::FortranOpenAcc),
             "fortran_openmp" => Ok(Format::FortranOpenMp),
             "cuda" => Ok(Format::Cuda),
+            "hip" => Ok(Format::Hip),
             "python" => Ok(Format::Python),
             _ => anyhow::bail!("Unknown format {:?}", s),
         }
@@ -42,13 +45,14 @@ impl Format {
             Format::Cuda => "Cuda compiler",
             Format::FortranOpenAcc => "Fortran with OpenACC",
             Format::FortranOpenMp => "Fortran with OpenMP",
+            Format::Hip => "HIP compiler",
             Format::Python => "Python 3",
         }
     }
 
     fn language(self) -> &'static str {
         match self {
-            Format::CppOpenAcc | Format::CppOpenMp | Format::Cuda => "c++",
+            Format::CppOpenAcc | Format::CppOpenMp | Format::Cuda | Format::Hip => "c++",
             Format::FortranOpenAcc | Format::FortranOpenMp => "fortran",
             Format::Python => "python",
         }
@@ -61,6 +65,7 @@ impl Format {
             Format::Cuda => "kernel_cuda",
             Format::FortranOpenAcc => "kernel_fortran_openacc",
             Format::FortranOpenMp => "kernel_fortran_openmp",
+            Format::Hip => "kernel_hip",
             Format::Python => "python3",
         }
     }
@@ -72,6 +77,7 @@ impl Format {
             Format::Cuda => ".cu",
             Format::FortranOpenAcc => ".f90",
             Format::FortranOpenMp => ".f90",
+            Format::Hip => ".hip",
             Format::Python => ".py",
         }
     }
@@ -82,7 +88,8 @@ impl Format {
             | Format::CppOpenMp
             | Format::Cuda
             | Format::FortranOpenAcc
-            | Format::FortranOpenMp => "text/plain",
+            | Format::FortranOpenMp
+            | Format::Hip => "text/plain",
             Format::Python => "text/x-python",
         }
     }
@@ -93,7 +100,8 @@ impl Format {
             | Format::CppOpenMp
             | Format::Cuda
             | Format::FortranOpenAcc
-            | Format::FortranOpenMp => None,
+            | Format::FortranOpenMp
+            | Format::Hip => None,
             Format::Python => Some("python".to_string()),
         }
     }
@@ -104,7 +112,8 @@ impl Format {
             | Format::CppOpenMp
             | Format::Cuda
             | Format::FortranOpenAcc
-            | Format::FortranOpenMp => None,
+            | Format::FortranOpenMp
+            | Format::Hip => None,
             Format::Python => Some("ipython3".to_string()),
         }
     }
@@ -115,7 +124,8 @@ impl Format {
             | Format::CppOpenMp
             | Format::Cuda
             | Format::FortranOpenAcc
-            | Format::FortranOpenMp => None,
+            | Format::FortranOpenMp
+            | Format::Hip => None,
             Format::Python => Some(CodemirrorMode {
                 name: "ipython".to_string(),
                 version: 3,

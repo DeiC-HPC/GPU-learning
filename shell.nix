@@ -2,7 +2,7 @@
 
 
 pkgs.mkShell {
-  buildInputs = with pkgs; [ nginx ] ++ stdenv.lib.optional (!stdenv.isDarwin) [ psmisc ] ;
+  buildInputs = with pkgs; [ nginx ] ++ lib.optional (!stdenv.isDarwin) [ psmisc ] ;
 
     shellHook = ''
       cleanup() {

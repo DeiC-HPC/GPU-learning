@@ -8,5 +8,7 @@
     - [Coalescing](./memory-coalescing.md)
     - [Management](./memory-management.md)
     - [Shared](./shared-memory.md)
+- [Latency Hiding](./latency-hiding.md)
+- [Error handling](./error-handling.md)
 - [Exploiting parallelism](./exploiting-parallelism.md)
 - [Further reading](./further-reading.md)

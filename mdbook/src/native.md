@@ -8,6 +8,7 @@ This part of the book is not relevant for you chosen environment. Please go
 
 1 How do we then use the GPU?
 -----------------------------
+Writing
 **TODO**: Some intro text
 
 {:.code-info pycuda pyopencl}
@@ -28,13 +29,13 @@ libraries.
 {:.code-link}
 [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/opencl/naive.ipynb)
 
-{:.code-info cuda pycuda}
+{:.code-info cuda pycuda hip}
 Kernels, as the functions running on GPUs are called, have `__global__` before
 their return type and name. The return type will always be `void` because these
 functions does not return anything. Instead the data is copied to and from the
 GPU.
 
-{:.code cuda pycuda}
+{:.code cuda pycuda hip}
 ```c++
 __global__ void someKernel(
     const float *readOnlyArgument,
@@ -45,7 +46,7 @@ __global__ void someKernel(
 }
 ```
 
-{:.code-info cuda pycuda}
+{:.code-info cuda hip pycuda}
 With the code above we see three variables, blockIdx, blockDim, and threadIdx,
 that we have not defined. These will be instantiated when we are running and
 tell us know where we are running. When running our code, it is run in a grid of
@@ -75,7 +76,7 @@ prg = cl.Program(ctx, """
 ```
 
 {:.code-info cuda}
-So how do we allocate memory on the GPU and copy data to and from it. There are
+So how do we allocate memory on the GPU and copy data to and from it? There are
 two ways that you can do this. Firstly you can use `cudaMalloc`, where you have
 control and choose when to copy to and from the GPU.
 
@@ -102,7 +103,41 @@ float* someMem;
 cudaMallocManaged(&someMem, n*sizeof(float));
 ```
 
-{:.code-info cuda}
+{:.code-info hip}
+So how do we allocate memory on the GPU and copy data to and from it? There are
+two ways that you can do this. Firstly you can use `hipMalloc`, where you have
+control and choose when to copy to and from the GPU.
+
+{:.code hip}
+```c++
+float* numbers = (float*)malloc(n*sizeof(float));
+float* numbers_device;
+hipMalloc((void**)&numbers_device, n*sizeof(float));
+
+// Copying to the device
+hipMemcpy(numbers_device, numbers, n*sizeof(float), hipMemcpyHostToDevice);
+// Copying from the device
+hipMemcpy(numbers, numbers_device, n*sizeof(float), hipMemcpyDeviceToHost);
+```
+{:.code-info hip}
+It is also possible to use `hipMallocManaged`, where copying will be done for
+you. This can lead to worse performance. Here there should also be a
+compatibility check before making the calls.
+
+{:.code hip}
+```c++
+int p_gpuDevice = 0; // GPU device number
+int managed_memory = 0;
+hipGetDeviceAttribute(&managed_memory, hipDeviceAttributeManagedMemory,p_gpuDevice));
+float* someMem;
+if (!managed_memory) {
+    // Return an error message
+} else {
+    hipMallocManaged(&someMem, n*sizeof(float));
+}
+```
+
+{:.code-info cuda hip}
 When calling our kernel we need to define the dimensions of our kernel and
 thread blocks. As said earlier the have up to 1024 threads and each dimension
 must be a power of 2. The grid is then defined as the number of thread blocks we
@@ -121,7 +156,7 @@ someKernel<<< grid, block >>>(readable, writable, 5.0f);
 
 2 Naïve implementation
 ----------------------
-{:code-info cuda pycuda}
+{:.code-info cuda pycuda}
 In this version we have taken the naïve approach and done a direct translation
 of the program. To use the library for complex arithmetic, we start by writing
 `#include "cuComplex.h"`. This enables us to use the type `cuFloatComplex`, and
@@ -132,7 +167,7 @@ support vector types, those are char, uchar, short, ushort, int, uint,
 long, ulong, longlong, ulonglong, float, and double. The length of the vector
 types can be 2, 3, and 4.
 
-{:code-info pyopencl}
+{:.code-info pyopencl}
 In this version we have taken the naïve approach and done a direct translation
 of the program. In OpenCL there is no library for complex numbers so we will have
 to make the calculations ourselves. We will be using `float2` as the type, which

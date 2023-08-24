@@ -1,7 +1,7 @@
 (function () {
   var sheet = document.createElement("style");
   var select = document.createElement("select");
-  select.innerHTML = '<option value=".cuda">CUDA</option> <option value=".pycuda">PyCUDA</option> <option value=".pyopencl">PyOpenCL</option> <option value=".cpp-openmp">C++ OpenMP</option> <option value=".cpp-openacc">C++ OpenACC</option> <option value=".f90-openmp">Fortran OpenMP</option> <option value=".f90-openacc">Fortran OpenACC</option>';
+  select.innerHTML = '<option value=".hip">HIP</option> <option value=".cuda">CUDA</option> <option value=".pycuda">PyCUDA</option> <option value=".pyopencl">PyOpenCL</option> <option value=".cpp-openmp">C++ OpenMP</option> <option value=".cpp-openacc">C++ OpenACC</option> <option value=".f90-openmp">Fortran OpenMP</option> <option value=".f90-openacc">Fortran OpenACC</option>';
   document.head.appendChild(sheet);
   document.querySelector(".left-buttons").appendChild(select);
 
@@ -17,8 +17,8 @@
     var language = window.localStorage.getItem("language");
 
     if (!language) {
-      window.localStorage.setItem("language", ".cuda");
-      select.querySelector('* [value=".cuda"]').selected = true;
+      window.localStorage.setItem("language", ".hip");
+      select.querySelector('* [value=".hip"]').selected = true;
     } else {
       select.querySelector('* [value="' + language + '"]').selected = true;
     }

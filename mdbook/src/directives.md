@@ -1,6 +1,6 @@
 # Directives
 
-{:.code-info cuda pycuda opencl pyopencl}
+{:.code-info cuda pycuda opencl pyopencl hip}
 This part of the book is not relevant for you chosen environment. Please go
 [here](./native.md) or change environment.
 

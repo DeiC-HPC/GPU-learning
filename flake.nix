@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     hpc-nix = {
-      url = "/home/tethys/git/hpc-nix";
+      url = "github:DeiC-HPC/gpu-jupyter";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -14,7 +14,8 @@
         inherit system;
         config.allowUnfree = true;
       };
-    in {
+      pythonenv = pkgs.python3.withPackages(ps: with ps; [ mkdocs mkdocs-material ]);
+    in rec {
       packages."${system}" = rec {
         mdbook-classy = pkgs.callPackage ./nix/mdbook-classy.nix { };
         mdbook-content = pkgs.stdenv.mkDerivation {
@@ -81,8 +82,7 @@
         docker-nginx = pkgs.dockerTools.buildImage {
           name = "GPU-learning";
           config = {
-            Env = [ "PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.curl}/bin:${pkgs.vim}/bin" ];
-            Cmd = ["${docker-nginx-command}"];
+            Env = [ "PATH=${pkgs.coreutils}/bin:${pkgs.gnused}/bin:${pkgs.curl}/bin:${pkgs.vim}/bin" ]; Cmd = ["${docker-nginx-command}"];
             User = "1000";
             Group = "100";
           };
@@ -99,6 +99,12 @@
             echo 'nogroup:x:65534:' >> etc/group
           '';
         };
+      };
+      devShell."${system}" = pkgs.mkShell {
+        nativeBuildInputs = with pkgs; [
+          mdbook
+          pythonenv
+        ];
       };
     };
 }

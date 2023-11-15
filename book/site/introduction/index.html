@@ -10,12 +10,14 @@
       
       
       
+        <link rel="next" href="../getting-started/">
+      
       <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.13">
     
     
       
-        <title>Mandelbrot sequential implementation - GPU Learning</title>
+        <title>Introduction - GPU Learning</title>
       
     
     
@@ -57,7 +59,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#sequential-implementation" class="md-skip">
+        <a href="#introduction" class="md-skip">
           Skip to content
         </a>
       
@@ -92,7 +94,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Mandelbrot sequential implementation
+              Introduction
             
           </span>
         </div>
@@ -176,11 +178,59 @@
 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../introduction/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Introduction
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Introduction
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#before-we-begin" class="md-nav__link">
+    Before we begin
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compilers-used" class="md-nav__link">
+    Compilers used
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -430,6 +480,8 @@
   
   
   
+    
+  
   
     <label class="md-nav__title" for="__toc">
       <span class="md-nav__icon md-icon"></span>
@@ -438,8 +490,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sequential-implementation" class="md-nav__link">
-    Sequential implementation
+  <a href="#before-we-begin" class="md-nav__link">
+    Before we begin
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compilers-used" class="md-nav__link">
+    Compilers used
   </a>
   
 </li>
@@ -459,26 +518,56 @@
                   
 
 
-  <h1>Mandelbrot sequential implementation</h1>
-
-<h2 id="sequential-implementation">Sequential implementation</h2>
-<p><span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>, <span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>
-To calculate the Mandelbrot set, we map each point <span class="arithmatex">\(c\)</span> in the complex plane to a function <span class="arithmatex">\( f_c(z) = z^2 + c \)</span>. The Mandelbrot, is the set of points such that iterated application of <span class="arithmatex">\(f_c\)</span> remains bounded forever, i.e. <span class="arithmatex">\(|f_c(f_c(\dots f_c(0) \dots))|\)</span> must not diverge to infinity.</p>
-<p>When visualizing the Mandelbrot, one is also interested in how quickly this expression grows beyond the circle bounded by <span class="arithmatex">\(|z|&lt;2\)</span>.</p>
-<p>The sequential version contains a function called <code>mandelbrot</code>, which is all the logic we need to calculate the Mandelbrot set.</p>
-<p class="code-link">{:.code cuda cpp-openmp cpp-openacc}
-<div class="language-c++ highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span><span class="o">!</span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">mandelbrot</span><span class="o">/</span><span class="n">cpp</span><span class="o">/</span><span class="n">reference</span><span class="o">-</span><span class="n">implementation</span><span class="p">.</span><span class="n">cpp</span><span class="o">!</span><span class="p">}</span>
-</span></code></pre></div><a href="/jupyter/lab/tree/mandelbrot/cpp/reference-implementation.ipynb">Run the code in Jupyter</a></p>
-<p class="code-link">{:.code f90-openmp f90-openacc}
-<div class="language-f90 highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="err">{{#</span><span class="k">include</span><span class="w"> </span><span class="p">..</span><span class="o">/</span><span class="p">..</span><span class="o">/</span><span class="n">examples</span><span class="o">/</span><span class="n">mandelbrot</span><span class="o">/</span><span class="n">fortran</span><span class="o">/</span><span class="n">reference</span><span class="o">-</span><span class="n">implementation</span><span class="p">.</span><span class="n">f90</span><span class="p">:</span><span class="n">mandelbrot</span><span class="err">}}</span>
-</span></code></pre></div><a href="/jupyter/lab/tree/mandelbrot/fortran/reference-implementation.ipynb">Run the code in Jupyter</a></p>
-<p class="code-link">{:.code pycuda pyopencl}
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="p">{{</span><span class="c1">#include ../../examples/mandelbrot/python/reference-implementation.py:mandelbrot}}</span>
-</span></code></pre></div><a href="/jupyter/lab/tree/mandelbrot/python/reference-implementation.ipynb">Run the code in Jupyter</a></p>
-<p>It takes a complex number <code>z</code> and a maximum number of iterations to be run.</p>
-<p>To setup the function we have a lot of variables with default values defining width and height of the image we are generating, how many iterations should at most be run in the <code>mandelbrot</code> function, and which area of the fractal should be shown (default is everything).</p>
-<p>Then we have two nested loops creating a complex number in the range of the minimum and maximum values and then calculating the mandelbrot function for each of these numbers.</p>
-<p>The data is then written to disk so we can visualize it and see the mandelbrot.</p>
+<h1 id="introduction">Introduction</h1>
+<p>This book contains material for learning GPU programming in various programming
+environments. It is meant for people who are confident in solving their own
+problems on a CPU but needs more computing capabilities.</p>
+<p>It is important to note before we start that not all GPUs are equal. So you will
+not necessarily see the same performance benefits by implementing your code on
+different GPUs. Newer GPUs are also more capable and include many functionalities
+that is not available on older devices, for example tensor cores for machine
+learning purposes.</p>
+<h2 id="before-we-begin">Before we begin</h2>
+<p>Before we go ahead and start programming GPUs in any of the programming
+languages, I will give you a short introduction to how they work and are
+different than general purpose CPUs. This information should help you understand
+which problems are suitable to be run on a GPU and something something...</p>
+<p>General purpose CPUs are what we call SISD (Single Instruction Stream,
+Single Data Stream) which means that every instruction on the CPU is only
+working on a single item at a time. This is not entirely true with CPUs
+implementing AVX instructions, but let us not get into that here.</p>
+<p>A GPU is instead what we call SIMD (Single Instruction, Multiple Data).
+This means that everything we do applies to multiple data items at once.</p>
+<p>Let us look at an example:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>i = some_index
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>a[i] = 42
+</span></code></pre></div></p>
+<p>On a CPU we would set a specific index in <code>a</code> and to overwrite the whole array
+we would need a loop of some sort to overwrite all values.</p>
+<p>On a GPU the variable <code>i</code> would have a different value for each core, meaning
+that we could set all values in <code>a</code> with just one line of code instead of using
+a loop.</p>
+<p>Due to the fact that we are running the same instructions on multiple data
+entities at the same time, we will have to think differently about control flow
+structures we normally use.</p>
+<p>If your code contains an if-else statement both the if and else part will be run
+for all data, but only the part which satisfies the condition will be active.
+This means that code with big if-else blocks will be ineffective to run on a
+GPU.</p>
+<h2 id="compilers-used">Compilers used</h2>
+<p>Also it is worth noting that the examples in this book are using the following
+compilers:</p>
+<ul>
+<li>HIP, ROCm 4.5</li>
+<li>Cuda, NVCC 11</li>
+<li>OpenMP and OpenACC, GCC 10.2.0 with NVPTX offloading.</li>
+<li>Python Cuda, PyCuda 2019.1.2</li>
+<li>Python OpenCL, PyOpenCL 2020.2.2</li>
+</ul>
+<p>If you do not have these compilers on your system and you are not comfortable
+with compiling them yourself then we have made a package for you. They require
+that you use a system compatible with the <a href="https://nixos.org">nix environment</a>.</p>
+<p><strong>TODO</strong>: write how to get them up and running on peoples own system.</p>
 
 
 

@@ -557,8 +557,7 @@ This part of the book is not relevant for you chosen environment. Please go
 <p><span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>, <span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>
 Sequential implementation</p>
 <hr />
-<p><span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>, <span class="arithmatex">\(p(x|y) = \frac{p(y|x)p(x)}{p(y)}\)</span>
-To calculate the Mandelbrot set, we map each point <span class="arithmatex">\(c\)</span> in the complex plane to a function <span class="arithmatex">\( f_c(z) = z^2 + c \)</span>. The Mandelbrot, is the set of points such that iterated application of <span class="arithmatex">\(f_c\)</span> remains bounded forever, i.e. <span class="arithmatex">\(|f_c(f_c(\dots f_c(0) \dots))|\)</span> must not diverge to infinity.</p>
+<p>To calculate the Mandelbrot set, we map each point <span class="arithmatex">\(c\)</span> in the complex plane to a function <span class="arithmatex">\( f_c(z) = z^2 + c \)</span>. The Mandelbrot, is the set of points such that iterated application of <span class="arithmatex">\(f_c\)</span> remains bounded forever, i.e. <span class="arithmatex">\(|f_c(f_c(\dots f_c(0) \dots))|\)</span> must not diverge to infinity.</p>
 <p>When visualizing the Mandelbrot, one is also interested in how quickly this expression grows beyond the circle bounded by <span class="arithmatex">\(|z|&lt;2\)</span>.</p>
 <p>The sequential version contains a function called <code>mandelbrot</code>, which is all the logic we need to calculate the Mandelbrot set.</p>
 <p class="code-link">{:.code cuda cpp-openmp cpp-openacc}

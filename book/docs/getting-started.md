@@ -27,23 +27,8 @@ This guide has been written in multiple versions, depending on which platform yo
 === "PyCuda"
     This text is specific to the PyCUDA guide.
 
-{:.code-info pyopencl}
-This text is specific to the PyOpenCL guide.
-
-{:.code-info cpp-openmp}
-This text is specific to the OpenMP guide (in C++).
-
-{:.code-info f90-openmp}
-This text is specific to the OpenMP guide (in Fortran).
-
-{:.code-info cpp-openacc}
-This text is specific to the OpenACC guide (in C++).
-
-{:.code-info f90-openacc}
-This text is specific to the OpenACC guide (in Fortran).
-
-1 Choosing the right compiler
------------------------------
+Choosing the right compiler
+---------------------------
 Choosing the right environment will most likely be based on what language your
 current software project is using. But we will still outline some advantages and
 disadvantages of each to help you choose, if you have multiple options.

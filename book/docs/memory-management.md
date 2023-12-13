@@ -11,23 +11,23 @@ In our previous examples we have moved data between CPU and GPU when doing our
 loops. The examples have also been fairly simple with only one loop. When working
 with bigger programs with many different loops.
 
-{:.code-info cpp-openmp}
-Here we can either use `#pragma omp target data`, where we use curly brackets to
-create the scope for the data, or `#pragma omp target enter data` and
-`#pragma omp target exit data`.
+=== "C++ OpenMP"
+    Here we can either use `#pragma omp target data`, where we use curly brackets to
+    create the scope for the data, or `#pragma omp target enter data` and
+    `#pragma omp target exit data`.
 
-{:.code-info cpp-openacc}
-Here we can either use `#pragma acc data`, where we use curly brackets to
-create the scope for the data, or `#pragma acc enter data` and
-`#pragma acc exit data`.
+=== "C++ OpenACC"
+    Here we can either use `#pragma acc data`, where we use curly brackets to
+    create the scope for the data, or `#pragma acc enter data` and
+    `#pragma acc exit data`.
 
-{:.code-info f90-openmp}
-Here we can either use `!$omp target data` and `!$omp end target data` around
-your code or `!$omp target enter data` and `!$omp target exit data`.
+=== "Fortran OpenMP"
+    Here we can either use `!$omp target data` and `!$omp end target data` around
+    your code or `!$omp target enter data` and `!$omp target exit data`.
 
-{:.code-info f90-openacc}
-Here we can either use `!$acc data` and `!$omp end data` around your code or
-`!$acc enter data` and `!$acc exit data`.
+=== "Fortran OpenACC"
+    Here we can either use `!$acc data` and `!$omp end data` around your code or
+    `!$acc enter data` and `!$acc exit data`.
 
 Map reduce example
 ------------------
@@ -40,13 +40,13 @@ the sum a list. If you're doing a reduction loop then you have to add a
 `reduction` clause to your pragma. Inside the reduction clause you have to set a
 reduction operator and then a number of variables.
 
-{:.code-info cpp-openacc cpp-openmp}
-The possible reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`,
-and `||`.
+=== "C++"
+    The possible reduction operators are `+`, `*`, `max`, `min`, `&`, `|`, `^`, `&&`,
+    and `||`.
 
-{:.code-info f90-openacc f90-openmp}
-The possible reduction operators are `+`, `*`, `max`, `min`, `iand`, `ior`,
-`ieor`, `.and.`, `.or`, `.eqv.`, and `.neqv`.
+=== "Fortran"
+    The possible reduction operators are `+`, `*`, `max`, `min`, `iand`, `ior`,
+    `ieor`, `.and.`, `.or`, `.eqv.`, and `.neqv`.
 
 The two programs are based around two loops the first being a map and the second
 being a reduce. In the not optimized program we copy variables in both loops.

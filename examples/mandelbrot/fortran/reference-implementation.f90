@@ -1,4 +1,3 @@
-! ANCHOR: mandelbrot
 function mandelbrot(z, maxiterations) result(iterations)
     complex :: z, c
     integer maxinterations, iterations
@@ -11,7 +10,6 @@ function mandelbrot(z, maxiterations) result(iterations)
         z = z*z + c
     end do
 end function mandelbrot
-! ANCHOR_END: mandelbrot
 
 PROGRAM mandelbrot_prog
     integer, parameter :: n = 1000

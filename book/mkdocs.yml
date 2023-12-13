@@ -4,7 +4,7 @@ theme:
   name: material
 
 nav:
-- Introduction: 'introduction.md'
+- Introduction: 'index.md'
 - Getting started:
     - Overview: 'getting-started.md'
     - 'Native': 'native.md'
@@ -14,34 +14,34 @@ nav:
     - 'Coalescing': 'memory-coalescing.md'
     - 'Management': 'memory-management.md'
     - 'Shared': 'shared-memory.md'
-- Latency Hiding: 'latency-hiding.md'
+- Overlapping data transfers: 'overlapping.md'
 - Error handling: 'error-handling.md'
 - Exploiting parallelism: 'exploiting-parallelism.md'
 - Further reading: 'further-reading.md'
 
 markdown_extensions:
-  - footnotes
   - admonition
   - abbr
   - attr_list
   - def_list
+  - footnotes
+  - md_in_html
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.details
-  - pymdownx.tabbed:
-      alternate_style: true
-  - pymdownx.superfences:
-      custom_fences:
-        - name: mermaid
-          class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.snippets
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
 
 extra_javascript:
   - js/mathjax.js

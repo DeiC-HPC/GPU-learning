@@ -15,7 +15,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
   int y = blockIdx.y * blockDim.y + threadIdx.y;
 
   if (x < width && y < height) {
-    /* ANCHOR: gaussianblur */
     float red = 0.0;
     float green = 0.0;
     float blue = 0.0;
@@ -34,7 +33,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
     pixels_out[y * width + x].red = red;
     pixels_out[y * width + x].green += green;
     pixels_out[y * width + x].blue += blue;
-    /* ANCHOR_END: gaussianblur */
   }
 }
 

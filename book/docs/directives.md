@@ -4,7 +4,7 @@
 This part of the book is not relevant for you chosen environment. Please go
 [here](./native.md) or change environment.
 
-{{#include mandelbrot-sequential-implementation.md}}
+--8<-- "docs/mandelbrot-sequential-implementation.md"
 
 Before we start
 ---------------

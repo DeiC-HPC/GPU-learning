@@ -51,7 +51,7 @@ Compilers used
 Also it is worth noting that the examples in this book are using the following
 compilers:
 
-- HIP, ROCm 4.5
+- HIP, ROCm 5.4
 - Cuda, NVCC 11
 - OpenMP and OpenACC, GCC 10.2.0 with NVPTX offloading.
 - Python Cuda, PyCuda 2019.1.2

@@ -14,7 +14,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
   int x = blockIdx.x * blockDim.x + threadIdx.x;
   int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-  /* ANCHOR: gaussianblur */
   __shared__ FloatPixel shared_pixels[T + FILTER_SIZE - 1][T + FILTER_SIZE - 1];
 
   for (int dy = -FILTER_SIZE / 2; dy <= T + FILTER_SIZE / 2; dy += T) {
@@ -53,7 +52,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
     pixels_out[y * width + x].green += green;
     pixels_out[y * width + x].blue += blue;
   }
-  /* ANCHOR_END: gaussianblur */
 }
 
 int main() {

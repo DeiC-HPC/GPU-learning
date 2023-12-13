@@ -6,27 +6,26 @@ When visualizing the Mandelbrot, one is also interested in how quickly this expr
 
 The sequential version contains a function called `mandelbrot`, which is all the logic we need to calculate the Mandelbrot set.
 
-{:.code cuda cpp-openmp cpp-openacc}
-```c++
-{!../../examples/mandelbrot/cpp/reference-implementation.cpp!}
-```
-{:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/reference-implementation.ipynb)
+=== "C++"
+    ```c++ linenums="1"
+    --8<-- "../examples/mandelbrot/cpp/reference-implementation.cpp:9:20"
+    ```
+    {:.code-link}
+    [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/cpp/reference-implementation.ipynb)
 
+=== "Fortran"
+    ```f90 linenums="1"
+    --8<-- "../examples/mandelbrot/fortran/reference-implementation.f90::12"
+    ```
+    {:.code-link}
+    [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/reference-implementation.ipynb)
 
-{:.code f90-openmp f90-openacc}
-```f90
-{{#include ../../examples/mandelbrot/fortran/reference-implementation.f90:mandelbrot}}
-```
-{:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/fortran/reference-implementation.ipynb)
-
-{:.code pycuda pyopencl}
-```python
-{{#include ../../examples/mandelbrot/python/reference-implementation.py:mandelbrot}}
-```
-{:.code-link}
-[Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/reference-implementation.ipynb)
+=== "Python"
+    ```python linenums="1"
+    --8<-- "../examples/mandelbrot/python/reference-implementation.py:6:12"
+    ```
+    {:.code-link}
+    [Run the code in Jupyter](/jupyter/lab/tree/mandelbrot/python/reference-implementation.ipynb)
 
 It takes a complex number `z` and a maximum number of iterations to be run.
 

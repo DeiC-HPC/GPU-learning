@@ -74,7 +74,8 @@
 
           ${jupyter} &
           JUPYTER_PID=$!
-          trap 'kill $JUPYTER_PID' TERM EXIT QUIT INT
+          echo $JUPYTER_PID
+          #trap 'kill $JUPYTER_PID' TERM EXIT QUIT INT
           cd /tmp
           mkdir -p logs
           ${pkgs.nginx}/bin/nginx -c ${docker-nginx-conf}/nginx.conf -p $PWD

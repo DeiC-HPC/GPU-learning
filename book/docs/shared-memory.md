@@ -71,7 +71,7 @@ TODO: GENERALISE BARRIERS
     that all threads, within a thread block, have reached a specific point before
     any can continue. This is useful especially when using larger kernels or shared
     memory, where we can make sure that every thread in the thread block has come
-    beyond a specific point. In CUDA we can use a barrier by calling the
+    beyond a specific point. In CUDA and HIP we can use a barrier by calling the
     `__syncthreads()` function. It is also important to note, that all code must
     pass the same barrier at the same time. Using barriers in a different way will
     result in undefined behaviour.

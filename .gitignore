@@ -4,3 +4,4 @@ notebooks
 result
 result-*
 logs
+.direnv/

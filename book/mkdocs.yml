@@ -7,16 +7,13 @@ nav:
 - Introduction: 'index.md'
 - Getting started:
     - Overview: 'getting-started.md'
-    - 'Native': 'native.md'
-    - 'Directives': 'directives.md'
+    - Mandelbrot: 'native.md'
+    #- 'Directives': 'directives.md'
 - Memory:
-    - Overview: 'memory.md'
-    - 'Coalescing': 'memory-coalescing.md'
-    - 'Management': 'memory-management.md'
-    - 'Shared': 'shared-memory.md'
-- Overlapping data transfers: 'overlapping.md'
+    - Coalescing: 'memory-coalescing.md'
+    #- Management: 'memory-management.md'
+    - Shared: 'shared-memory.md'
 - Error handling: 'error-handling.md'
-- Exploiting parallelism: 'exploiting-parallelism.md'
 - Further reading: 'further-reading.md'
 
 markdown_extensions:

@@ -1,4 +1,4 @@
-# Native
+# Mandelbrot
 
 --8<-- "docs/mandelbrot-sequential-implementation.md"
 

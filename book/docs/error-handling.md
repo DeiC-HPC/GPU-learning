@@ -59,8 +59,11 @@ up the error code. But it is also possible to get it printed out.
     hipGetErrorString(status)
     ```
 
-a
--
+Errors with file and line numbers
+---------------------------------
+
+If we want more precise error information, we can make a C++ macro to help us
+give filename and line number of the place where an error occured.
 
 === "CUDA"
 
@@ -84,4 +87,22 @@ a
             std::cout << "HIP error: " << hipGetErrorString(err) << ", file: " << file << " line: " << line << std::endl;
         }
     }
+    ```
+
+We can then wrap our function calls with this macro to get error messages
+with filename and linenumber, that can help us quickly identify where something
+might have gone wrong.
+
+=== "CUDA"
+
+    ```c++ linenums="1"
+    float *p;
+    CUDA_ERROR_CHECK(cudaMalloc(&p, 1000000 * sizeof(float)))
+    ```
+
+=== "HIP"
+
+    ```c++ linenums="1"
+    float *p;
+    HIP_ERROR_CHECK(hipMalloc(&p, 1000000 * sizeof(float)))
     ```

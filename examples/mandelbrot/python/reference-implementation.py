@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import math
 import time
 
-# ANCHOR: mandelbrot
 def mandelbrot(z, max_iterations):
     c = z
     for i in range(max_iterations):
@@ -11,7 +10,6 @@ def mandelbrot(z, max_iterations):
             return i
         z = z*z + c
     return max_iterations
-# ANCHOR_END: mandelbrot
 
 width = 1000
 height = 1000

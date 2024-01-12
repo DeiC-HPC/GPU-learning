@@ -6,7 +6,6 @@
 
 using namespace std;
 
-/* ANCHOR: mandelbrot */
 int mandelbrot(complex<float> z, int maxiterations) {
   complex<float> c = z;
   for (int i = 0; i < maxiterations; i++) {
@@ -18,7 +17,6 @@ int mandelbrot(complex<float> z, int maxiterations) {
 
   return maxiterations;
 }
-/* ANCHOR_END: mandelbrot */
 
 int main() {
   int width = 1000;
@@ -45,13 +43,11 @@ int main() {
 
   timer time;
 
-  /* ANCHOR: loops */
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
       res[i * width + j] = mandelbrot(zs[i * width + j], maxiterations);
     }
   }
-  /* ANCHOR_END: loops */
 
   cout << "Elapsed time: " << time.getTime() << endl;
 

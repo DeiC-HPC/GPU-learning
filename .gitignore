@@ -1,7 +1,8 @@
 # Jupyter Notebook
 .ipynb_checkpoints
 notebooks
-book
 result
 result-*
 logs
+.direnv/
+book/site/

@@ -14,7 +14,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
   int x = blockIdx.x * blockDim.x + threadIdx.x;
   int y = blockIdx.y * blockDim.y + threadIdx.y;
 
-  /* ANCHOR: gaussianblur */
   extern __shared__ FloatPixel shared_pixels[];
 
   for (int dy = -FILTER_SIZE / 2; dy <= T + FILTER_SIZE / 2; dy += T) {
@@ -53,7 +52,6 @@ __global__ void blur(const FloatPixel *pixels_in, FloatPixel *pixels_out,
     pixels_out[y * width + x].green += green;
     pixels_out[y * width + x].blue += blue;
   }
-  /* ANCHOR_END: gaussianblur */
 }
 
 int main() {
@@ -75,10 +73,9 @@ int main() {
   dim3 block(T, T, 1), grid(dimx, dimy, 1);
 
   timer time;
-  /* ANCHOR: call */
   blur<<<grid, block, SHARED_SIZE*SHARED_SIZE*sizeof(FloatPixel)>>>(device_pixels_in, device_pixels_out, im.width,
                         im.height);
-  /* ANCHOR_END: call */
+
   cudaDeviceSynchronize();
   cout << "Elapsed time: " << time.getTime() << endl;
 

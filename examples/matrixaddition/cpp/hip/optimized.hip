@@ -6,7 +6,6 @@ using namespace std;
 
 __global__ void matrixaddition(const int *a, const int *b, int *res,
                                ushort width, ushort height) {
-  /* ANCHOR: matrixaddition */
   int j = blockIdx.x * blockDim.x + threadIdx.x;
 
   if (j < width) {
@@ -14,7 +13,6 @@ __global__ void matrixaddition(const int *a, const int *b, int *res,
       res[i * width + j] = a[i * width + j] + b[i * width + j];
     }
   }
-  /* ANCHOR_END: matrixaddition */
 }
 
 int main() {

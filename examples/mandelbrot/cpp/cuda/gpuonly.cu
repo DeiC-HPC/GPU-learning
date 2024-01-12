@@ -7,7 +7,7 @@
 
 using namespace std;
 
-/* ANCHOR: mandelbrot */
+/* --8<-- [start:mandelbrot] */
 __global__ void mandelbrot(
     int *res,
     ushort width,
@@ -38,7 +38,7 @@ __global__ void mandelbrot(
   }
   res[y * width + x] = i;
 }
-/* ANCHOR_END: mandelbrot */
+/* --8<-- [end:mandelbrot] */
 
 int main() {
   int width = 1000;
